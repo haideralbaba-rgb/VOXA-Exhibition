@@ -44,6 +44,18 @@ export const CAROUSEL_IMAGES: string[] = [
   "/images/carousel/c61056bf-84b8-490e-8b09-b58d6471a093.png",
 ];
 
+/* Restaurant Graphic Design Posters */
+export const RESTAURANT_POSTERS: string[] = [
+  "/images/restaurants/shawarma.jpg",
+  "/images/restaurants/masgouf.jpg",
+  "/images/restaurants/quzi.jpg",
+  "/images/restaurants/burger.jpg",
+  "/images/restaurants/kebab.jpg",
+  "/images/restaurants/smash.jpg",
+  "/images/restaurants/kahi.jpg",
+  "/images/restaurants/pizza.jpg",
+];
+
 export const works: Work[] = [
   {
     id: "w1",
@@ -78,6 +90,18 @@ export const works: Work[] = [
     desc: "مجموعة فوتوغرافية حصرية تضم ثماني لقطات منتقاة بعناية تبرز جودة الزوايا، التباين، وعمق التفاصيل البصرية.",
     src: CAROUSEL_IMAGES[0],
     images: CAROUSEL_IMAGES,
+    span: "col-span-2 md:col-span-4 row-span-2 md:row-span-2",
+    fspan: "col-span-2 md:col-span-4 row-span-2 md:row-span-2",
+  },
+  {
+    id: "w4",
+    kind: "graphic",
+    title: "بوسترات إعلانية للمطاعم",
+    meta: "غرافيك ديزاين · ٨ تصاميم تسويقية",
+    year: "٢٠٢٦",
+    desc: "سلسلة تصاميم وبوسترات إعلانية تجارية للمطاعم العراقية والعصرية، تجمع بين جاذبية الأطباق والعبارات التسويقية المباشرة بدون أي تعقيد بصري.",
+    src: RESTAURANT_POSTERS[0],
+    images: RESTAURANT_POSTERS,
     span: "col-span-2 md:col-span-4 row-span-2 md:row-span-2",
     fspan: "col-span-2 md:col-span-4 row-span-2 md:row-span-2",
   },

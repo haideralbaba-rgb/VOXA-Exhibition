@@ -33,6 +33,7 @@ const filters: { id: Filter; label: string; icon: React.ReactNode }[] = [
   { id: "all", label: "الكل", icon: <IconGrid className="h-4 w-4" /> },
   { id: "video", label: "فيديو", icon: <IconVideo className="h-4 w-4" /> },
   { id: "photo", label: "تصوير", icon: <IconPhoto className="h-4 w-4" /> },
+  { id: "graphic", label: "غرافيك", icon: <IconGraphic className="h-4 w-4" /> },
 ];
 
 function Card({
