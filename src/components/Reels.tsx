@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "motion/react";
 import { reels } from "../data";
 import type { Reel } from "../data";
-import { IconClose, IconEye, IconPlay, IconReel, IconYoutube } from "./icons";
+import { IconClose, IconEye } from "./icons";
 import { MaskWords, SectionLabel } from "./Reveal";
 import { lenis } from "../lib/lenis";
 import { ar } from "../lib/format";
@@ -19,7 +19,7 @@ function ReelCard({
   return (
     <div
       onClick={() => onOpen(r)}
-      data-cursor="تشغيل"
+      data-cursor="معاينة"
       className={`group relative h-[58vh] max-h-[640px] shrink-0 aspect-[9/16] cursor-pointer overflow-hidden rounded-[28px] border border-white/10 bg-coal ${
         i % 2 ? "translate-y-10 md:translate-y-14" : "-translate-y-2"
       }`}
@@ -29,7 +29,7 @@ function ReelCard({
         alt={r.title}
         loading="lazy"
         draggable={false}
-        className="absolute inset-0 h-full w-full scale-105 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.18]"
+        className="absolute inset-0 h-full w-full scale-105 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.15]"
       />
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40" />
@@ -43,20 +43,19 @@ function ReelCard({
       </div>
 
       <div className="absolute start-4 top-9 flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 font-display text-xs font-extrabold backdrop-blur">
-        <IconReel className="h-4 w-4 text-lime" />
+        <span className="text-lime text-xs">✦</span>
         {r.tag}
       </div>
 
-      {/* Center play button on hover */}
+      {/* Center preview button on hover */}
       <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-lime text-black shadow-xl transition-transform duration-300 group-hover:scale-110">
-          <IconPlay className="h-6 w-6" />
+          <IconEye className="h-6 w-6" />
         </div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 p-5">
-        <div className="mb-2 flex items-center gap-1.5 text-sm font-bold text-lime">
-          <IconEye className="h-4 w-4" />
+        <div className="mb-1.5 flex items-center gap-1.5 text-xs font-extrabold text-lime tracking-wide">
           {r.views}
         </div>
         <div className="font-display text-2xl leading-[1.3] font-black">{r.title}</div>
@@ -91,10 +90,10 @@ function ReelModal({ r, onClose }: { r: Reel; onClose: () => void }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 30 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="relative z-10 flex max-h-[92vh] w-full max-w-sm flex-col overflow-hidden rounded-[28px] border border-white/15 bg-black shadow-2xl"
+        className="relative z-10 flex max-h-[92vh] w-full max-w-sm md:max-w-md flex-col overflow-hidden rounded-[28px] border border-white/15 bg-black shadow-2xl"
       >
-        <div className="relative aspect-[9/16] w-full bg-black">
-          {r.youtubeId && (
+        <div className="relative aspect-[9/16] w-full bg-[#0a0a0d] overflow-hidden flex items-center justify-center">
+          {r.youtubeId ? (
             <iframe
               src={`https://www.youtube-nocookie.com/embed/${r.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
               title={r.title}
@@ -102,26 +101,32 @@ function ReelModal({ r, onClose }: { r: Reel; onClose: () => void }) {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
+          ) : (
+            <img
+              src={r.src}
+              alt={r.title}
+              className="h-full w-full object-cover"
+            />
           )}
         </div>
 
         <div className="flex items-center justify-between border-t border-white/10 bg-[#0c0c10] p-4">
-          <div>
-            <div className="text-xs font-bold text-lime">{r.tag} · {r.views} مشاهدة</div>
-            <div className="font-display text-lg font-black text-white">{r.title}</div>
+          <div className="min-w-0 flex-1 pe-3">
+            <div className="text-xs font-bold text-lime">{r.tag} · {r.views}</div>
+            <div className="font-display text-lg font-black text-white truncate">{r.title}</div>
+            {r.desc && <p className="mt-1 text-xs text-ink/70 leading-relaxed">{r.desc}</p>}
           </div>
-          <div className="flex items-center gap-2">
-            {r.youtubeId && (
-              <a
-                href={`https://www.youtube.com/shorts/${r.youtubeId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-red-600"
-                title="فتح في YouTube"
-              >
-                <IconYoutube className="h-4 w-4" />
-              </a>
-            )}
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href={r.src}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-lime hover:text-black"
+              title="عرض بالحجم الكامل"
+            >
+              <IconEye className="h-4 w-4" />
+            </a>
             <button
               onClick={onClose}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-lime text-black font-bold transition-transform hover:scale-105"
@@ -173,11 +178,11 @@ export default function Reels() {
           dir="ltr"
           aria-hidden
         >
-          REELS
+          DESIGNS
         </motion.div>
 
         <div className="relative z-10 px-5 pt-20 md:px-10 md:pt-24">
-          <SectionLabel index="٠٣">ريلز وفيديو قصير</SectionLabel>
+          <SectionLabel index="٠٣">تصاميم وبوسترات إعلانية</SectionLabel>
           <h2 className="font-display text-5xl leading-[1.15] font-black md:text-8xl">
             <MaskWords text="٦٠ إطارًا" highlight={[0]} /> <MaskWords text="من الإبهار" delay={0.15} />
           </h2>
@@ -194,10 +199,10 @@ export default function Reels() {
           ))}
           <div className="flex h-[58vh] w-[70vw] shrink-0 flex-col items-start justify-center gap-4 ps-6 md:w-[30vw]">
             <div className="font-display text-4xl leading-[1.3] font-black md:text-6xl">
-              والمزيد <span className="text-lime">ينتظر</span> على الشاشة.
+              والمزيد <span className="text-lime">من الإبهار</span> قادم.
             </div>
             <div className="text-lg font-bold text-ink/60">
-              {ar(reels.length)} ريلز متصلة بأحدث الإنتاجات
+              {ar(reels.length)} تصاميم حصرية تميز علامتك
             </div>
           </div>
         </motion.div>
