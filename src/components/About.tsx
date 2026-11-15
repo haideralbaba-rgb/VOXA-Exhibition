@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { animate, motion, useInView, useScroll, useTransform } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import type { MotionValue } from "motion/react";
-import { SectionLabel, FadeUp } from "./Reveal";
-import { ar } from "../lib/format";
+import { SectionLabel } from "./Reveal";
 
 const statement =
   "أنا لا ألتقط الصور فقط، أنا أصنع لحظات تُشاهَد مرتين. كل لقطة وكل تصميم يبدأ بسؤال واحد: كيف نجعل العين تتوقّف؟";
@@ -18,26 +17,6 @@ function Word({ w, i, total, p, accentWord }: { w: string; i: number; total: num
     <motion.span style={{ opacity, y }} className={`inline-block ${accentWord ? "text-lime" : ""}`}>
       {w}&nbsp;
     </motion.span>
-  );
-}
-
-function Counter({ to, suffix, label }: { to: number; suffix: string; label: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
-  const [v, setV] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    const c = animate(0, to, { duration: 2.2, ease: [0.16, 1, 0.3, 1], onUpdate: setV });
-    return () => c.stop();
-  }, [inView, to]);
-  return (
-    <div ref={ref} className="border-t border-white/15 pt-5">
-      <div className="font-display text-6xl leading-[1.1] font-black text-ink md:text-7xl">
-        {ar(v)}
-        <span className="text-lime">{suffix}</span>
-      </div>
-      <div className="mt-1 text-lg font-bold text-ink/60">{label}</div>
-    </div>
   );
 }
 
@@ -58,21 +37,6 @@ export default function About() {
             <Word key={i} w={w} i={i} total={words.length} p={scrollYProgress} accentWord={accent.has(i)} />
           ))}
         </p>
-
-        <div className="mt-20 grid grid-cols-2 gap-x-6 gap-y-12 md:mt-32 md:grid-cols-4 md:gap-x-10">
-          <FadeUp>
-            <Counter to={300} suffix="+" label="مشروع منجز" />
-          </FadeUp>
-          <FadeUp delay={0.1}>
-            <Counter to={12} suffix="م" label="مشاهدة ريلز" />
-          </FadeUp>
-          <FadeUp delay={0.2}>
-            <Counter to={98} suffix="٪" label="عملاء يعودون" />
-          </FadeUp>
-          <FadeUp delay={0.3}>
-            <Counter to={8} suffix="" label="سنوات خبرة" />
-          </FadeUp>
-        </div>
       </div>
     </section>
   );

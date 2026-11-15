@@ -2,13 +2,25 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import Magnetic from "./Magnetic";
 import { MaskWords } from "./Reveal";
-import { IconArrow, IconBehance, IconInstagram, IconYoutube } from "./icons";
+import { IconArrow, IconFacebook, IconInstagram, IconWhatsapp } from "./icons";
 import { Logo } from "./Nav";
 
 const socials = [
-  { label: "إنستغرام", Icon: IconInstagram },
-  { label: "بيهانس", Icon: IconBehance },
-  { label: "يوتيوب", Icon: IconYoutube },
+  {
+    label: "إنستغرام",
+    href: "https://www.instagram.com/voxa.vision?cplk=eGdmdXo5bHBjdmZl",
+    Icon: IconInstagram,
+  },
+  {
+    label: "فيسبوك",
+    href: "https://www.facebook.com/share/1Jg8ThvxKq/",
+    Icon: IconFacebook,
+  },
+  {
+    label: "واتساب",
+    href: "https://wa.me/9647782383749",
+    Icon: IconWhatsapp,
+  },
 ];
 
 export default function Contact() {
@@ -34,7 +46,7 @@ export default function Contact() {
         <div className="mt-14 flex flex-col items-start justify-between gap-10 md:mt-20 md:flex-row md:items-end">
           <Magnetic strength={0.4}>
             <a
-              href="mailto:hello@voxa.studio"
+              href="mailto:voxavision@gmail.com"
               className="group flex items-center gap-4 rounded-full bg-black py-3 ps-3 pe-8 font-display text-xl font-black text-lime transition-transform hover:scale-[1.03] md:text-3xl"
             >
               <motion.span
@@ -43,17 +55,19 @@ export default function Contact() {
               >
                 <IconArrow className="h-6 w-6 md:h-9 md:w-9" />
               </motion.span>
-              <span dir="ltr">hello@voxa.studio</span>
+              <span dir="ltr">voxavision@gmail.com</span>
             </a>
           </Magnetic>
 
           <div className="flex gap-3">
-            {socials.map(({ label, Icon }) => (
+            {socials.map(({ label, href, Icon }) => (
               <a
                 key={label}
-                href="#"
-                onClick={(e) => e.preventDefault()}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center gap-2 rounded-full border-2 border-black px-5 py-3 font-display text-[15px] font-black transition-colors hover:bg-black hover:text-lime"
+                aria-label={label}
               >
                 <Icon className="h-5 w-5" />
                 <span className="hidden sm:inline">{label}</span>
