@@ -4,7 +4,7 @@ import { MaskWords } from "./Reveal";
 import Magnetic from "./Magnetic";
 import { IconArrow, IconPlay } from "./icons";
 import { scrollToId } from "../lib/lenis";
-import { YOUTUBE_HERO_ID, YOUTUBE_HERO_POSTER } from "../data";
+import { VIDEO_LENS, POSTER_LENS } from "../data";
 import { ar } from "../lib/format";
 
 function Timecode() {
@@ -114,34 +114,24 @@ export default function Hero({ ready }: { ready: boolean }) {
           </motion.div>
         </motion.div>
 
-        {/* Expanding cinema frame with YouTube Embed */}
+        {/* Expanding cinema frame */}
         <motion.div
           className="absolute inset-0 z-20 overflow-hidden bg-black"
           style={{ clipPath: clip }}
           data-cursor="ريل"
         >
-          {/* Instant poster to avoid any flash */}
-          <motion.img
-            src={YOUTUBE_HERO_POSTER}
-            alt="VOXA Hero Reel"
-            style={{ scale: vScale }}
+          <motion.video
             className="absolute inset-0 h-full w-full object-cover"
-          />
-
-          {/* YouTube Embed Player (looping & muted) */}
-          <motion.div
             style={{ scale: vScale }}
-            className="pointer-events-none absolute inset-0 flex h-full w-full items-center justify-center overflow-hidden"
-          >
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_HERO_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${YOUTUBE_HERO_ID}&playsinline=1&rel=0&disablekb=1&modestbranding=1`}
-              title="VOXA Hero Reel"
-              className="pointer-events-none absolute h-[140%] w-[140%] min-h-full min-w-full border-0 object-cover"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            />
-          </motion.div>
-
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30" />
+            src={VIDEO_LENS}
+            poster={POSTER_LENS}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30" />
 
           {/* HUD */}
           <motion.div
