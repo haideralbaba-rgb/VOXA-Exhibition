@@ -1,30 +1,26 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion, useScroll, useSpring, useTransform } from "motion/react";
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "motion/react";
 import { reels } from "../data";
 import type { Reel } from "../data";
-import { IconEye, IconReel } from "./icons";
+import { IconClose, IconEye, IconPlay, IconReel, IconYoutube } from "./icons";
 import { MaskWords, SectionLabel } from "./Reveal";
+import { lenis } from "../lib/lenis";
 import { ar } from "../lib/format";
 
-function ReelCard({ r, i }: { r: Reel; i: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const vid = useRef<HTMLVideoElement>(null);
-  const [on, setOn] = useState(false);
-
-  useEffect(() => {
-    const v = vid.current;
-    if (!v) return;
-    if (on) v.play().catch(() => {});
-    else v.pause();
-  }, [on]);
-
+function ReelCard({
+  r,
+  i,
+  onOpen,
+}: {
+  r: Reel;
+  i: number;
+  onOpen: (r: Reel) => void;
+}) {
   return (
     <div
-      ref={ref}
-      onPointerEnter={() => setOn(true)}
-      onPointerLeave={() => setOn(false)}
-      data-cursor={r.video ? "شغّل" : "ريل"}
-      className={`group relative h-[58vh] max-h-[640px] shrink-0 aspect-[9/16] overflow-hidden rounded-[28px] border border-white/10 bg-coal ${
+      onClick={() => onOpen(r)}
+      data-cursor="تشغيل"
+      className={`group relative h-[58vh] max-h-[640px] shrink-0 aspect-[9/16] cursor-pointer overflow-hidden rounded-[28px] border border-white/10 bg-coal ${
         i % 2 ? "translate-y-10 md:translate-y-14" : "-translate-y-2"
       }`}
     >
@@ -35,27 +31,27 @@ function ReelCard({ r, i }: { r: Reel; i: number }) {
         draggable={false}
         className="absolute inset-0 h-full w-full scale-105 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.18]"
       />
-      {r.video && (
-        <video
-          ref={vid}
-          src={r.video}
-          muted
-          loop
-          playsInline
-          preload="none"
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${on ? "opacity-100" : "opacity-0"}`}
-        />
-      )}
+
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40" />
 
-      {/* story progress bar */}
+      {/* Story progress bar */}
       <div className="absolute inset-x-4 top-4 h-[3px] overflow-hidden rounded-full bg-white/25">
-        <div className="h-full origin-right animate-[reelbar_6s_linear_infinite] rounded-full bg-white" style={{ animationDelay: `${i * -1.1}s` }} />
+        <div
+          className="h-full origin-right animate-[reelbar_6s_linear_infinite] rounded-full bg-white"
+          style={{ animationDelay: `${i * -1.1}s` }}
+        />
       </div>
 
       <div className="absolute start-4 top-9 flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 font-display text-xs font-extrabold backdrop-blur">
         <IconReel className="h-4 w-4 text-lime" />
         {r.tag}
+      </div>
+
+      {/* Center play button on hover */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-lime text-black shadow-xl transition-transform duration-300 group-hover:scale-110">
+          <IconPlay className="h-6 w-6" />
+        </div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 p-5">
@@ -65,7 +61,77 @@ function ReelCard({ r, i }: { r: Reel; i: number }) {
         </div>
         <div className="font-display text-2xl leading-[1.3] font-black">{r.title}</div>
       </div>
+    </div>
+  );
+}
 
+function ReelModal({ r, onClose }: { r: Reel; onClose: () => void }) {
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", k);
+    lenis?.stop();
+    return () => {
+      window.removeEventListener("keydown", k);
+      lenis?.start();
+    };
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 md:p-8">
+      <motion.div
+        className="absolute inset-0 bg-black/90 backdrop-blur-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        data-cursor="إغلاق"
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 30 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="relative z-10 flex max-h-[92vh] w-full max-w-sm flex-col overflow-hidden rounded-[28px] border border-white/15 bg-black shadow-2xl"
+      >
+        <div className="relative aspect-[9/16] w-full bg-black">
+          {r.youtubeId && (
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${r.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+              title={r.title}
+              className="h-full w-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          )}
+        </div>
+
+        <div className="flex items-center justify-between border-t border-white/10 bg-[#0c0c10] p-4">
+          <div>
+            <div className="text-xs font-bold text-lime">{r.tag} · {r.views} مشاهدة</div>
+            <div className="font-display text-lg font-black text-white">{r.title}</div>
+          </div>
+          <div className="flex items-center gap-2">
+            {r.youtubeId && (
+              <a
+                href={`https://www.youtube.com/shorts/${r.youtubeId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-red-600"
+                title="فتح في YouTube"
+              >
+                <IconYoutube className="h-4 w-4" />
+              </a>
+            )}
+            <button
+              onClick={onClose}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-lime text-black font-bold transition-transform hover:scale-105"
+              title="إغلاق"
+            >
+              <IconClose className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
@@ -74,6 +140,7 @@ export default function Reels() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [max, setMax] = useState(0);
+  const [activeReel, setActiveReel] = useState<Reel | null>(null);
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
   const smooth = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.3 });
@@ -99,7 +166,7 @@ export default function Reels() {
     <section id="reels" ref={sectionRef} className="relative h-[420vh] bg-[#08080a]">
       <style>{`@keyframes reelbar{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}`}</style>
       <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
-        {/* giant background word */}
+        {/* Giant background word */}
         <motion.div
           style={{ x: bgText }}
           className="pointer-events-none absolute -top-4 start-0 select-none font-display text-[38vw] leading-none font-black text-outline-dim whitespace-nowrap"
@@ -112,20 +179,26 @@ export default function Reels() {
         <div className="relative z-10 px-5 pt-20 md:px-10 md:pt-24">
           <SectionLabel index="٠٣">ريلز وفيديو قصير</SectionLabel>
           <h2 className="font-display text-5xl leading-[1.15] font-black md:text-8xl">
-            <MaskWords text="٦٠ إطارًا" highlight={[0]} />{" "}
-            <MaskWords text="من الإبهار" delay={0.15} />
+            <MaskWords text="٦٠ إطارًا" highlight={[0]} /> <MaskWords text="من الإبهار" delay={0.15} />
           </h2>
         </div>
 
-        <motion.div ref={trackRef} style={{ x }} className="relative z-10 flex w-max items-center gap-5 px-5 py-8 md:gap-8 md:px-10" dir="rtl">
+        <motion.div
+          ref={trackRef}
+          style={{ x }}
+          className="relative z-10 flex w-max items-center gap-5 px-5 py-8 md:gap-8 md:px-10"
+          dir="rtl"
+        >
           {reels.map((r, i) => (
-            <ReelCard key={r.id} r={r} i={i} />
+            <ReelCard key={r.id} r={r} i={i} onOpen={setActiveReel} />
           ))}
           <div className="flex h-[58vh] w-[70vw] shrink-0 flex-col items-start justify-center gap-4 ps-6 md:w-[30vw]">
             <div className="font-display text-4xl leading-[1.3] font-black md:text-6xl">
               والمزيد <span className="text-lime">ينتظر</span> على الشاشة.
             </div>
-            <div className="text-lg font-bold text-ink/60">{ar(6)} ريلز من أصل أكثر من {ar(120)}</div>
+            <div className="text-lg font-bold text-ink/60">
+              {ar(reels.length)} ريلز متصلة بأحدث الإنتاجات
+            </div>
           </div>
         </motion.div>
 
@@ -136,6 +209,10 @@ export default function Reels() {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {activeReel && <ReelModal r={activeReel} onClose={() => setActiveReel(null)} />}
+      </AnimatePresence>
     </section>
   );
 }

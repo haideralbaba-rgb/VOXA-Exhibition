@@ -109,6 +109,18 @@ export const IconEye = (p: P) => (
   </svg>
 );
 
+export const IconChevronLeft = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M15 18l-6-6 6-6" />
+  </svg>
+);
+
+export const IconChevronRight = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+);
+
 export const IconInstagram = (p: P) => (
   <svg {...base(p)}>
     <rect x="3" y="3" width="18" height="18" rx="5" />
