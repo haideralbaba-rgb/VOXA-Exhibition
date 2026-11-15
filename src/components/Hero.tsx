@@ -83,10 +83,10 @@ export default function Hero({ ready }: { ready: boolean }) {
             }}
           >
             <span className="block">
-              <MaskWords text="أحوّل اللقطة" trigger="ready" ready={ready} delay={0.1} />
+              <MaskWords text="أصنع المشهد" trigger="ready" ready={ready} delay={0.1} />
             </span>
             <span className="block">
-              <MaskWords text="إلى هيبة." trigger="ready" ready={ready} delay={0.35} highlight={[1]} />
+              <MaskWords text="وأفرض الهيبة." trigger="ready" ready={ready} delay={0.35} highlight={[1]} />
             </span>
           </h1>
 

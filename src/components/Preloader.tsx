@@ -25,7 +25,7 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <VoxaMark className="h-7 w-7 text-black" />
+          <VoxaMark className="h-7 w-auto shrink-0 text-black" />
           <span className="font-display text-xl font-black tracking-wider">VOXA</span>
         </div>
         <span className="font-display text-sm font-bold">جارٍ تحميل المعرض</span>

@@ -15,12 +15,40 @@ const base = (p: P): P => ({
   ...p,
 });
 
-/** VOXA mark — a "V" whose tip is a lens. */
-export function VoxaMark({ className }: { className?: string }) {
+/** VOXA mark — sound wave identity mark (black/ink wave with teal trailing wave). */
+export function VoxaMark({ className = "h-7 w-auto" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={className} aria-hidden>
-      <path d="M1 3h9.6L16 17.2 21.4 3H31L20.6 29H11.4z" fill="currentColor" />
-      <circle cx="16" cy="23.2" r="2.3" fill="#050506" />
+    <svg viewBox="0 0 100 80" className={className} fill="none" aria-hidden="true">
+      <g fill="currentColor">
+        <rect x="2.57" y="37.86" width="2.2" height="6.11" rx="1" />
+        <rect x="6.04" y="36.03" width="2.2" height="9.77" rx="1" />
+        <rect x="9.52" y="33.59" width="2.2" height="14.66" rx="1" />
+        <rect x="12.29" y="29.92" width="2.2" height="21.37" rx="1" />
+        <rect x="15.77" y="24.43" width="2.2" height="31.76" rx="1" />
+        <rect x="19.93" y="18.32" width="2.2" height="45.19" rx="1" />
+        <rect x="24.10" y="10.99" width="2.2" height="59.24" rx="1" />
+        <rect x="28.27" y="4.27" width="2.2" height="71.45" rx="1" />
+        <rect x="32.43" y="0.61" width="2.2" height="78.78" rx="1" />
+        <rect x="37.99" y="6.72" width="2.2" height="67.79" rx="1" />
+        <rect x="42.16" y="13.44" width="2.2" height="54.96" rx="1" />
+        <rect x="46.32" y="21.37" width="2.2" height="39.69" rx="1" />
+        <rect x="50.49" y="28.70" width="2.2" height="24.43" rx="1" />
+        <rect x="53.96" y="34.20" width="2.2" height="12.82" rx="1" />
+        <rect x="58.13" y="31.76" width="2.2" height="17.10" rx="1" />
+        <rect x="62.29" y="25.04" width="2.2" height="31.15" rx="1" />
+        <rect x="66.46" y="17.10" width="2.2" height="46.41" rx="1" />
+        <rect x="69.93" y="12.82" width="2.2" height="54.35" rx="1" />
+      </g>
+      <g fill="#4e7e87">
+        <rect x="74.10" y="9.77" width="2.2" height="59.85" rx="1" />
+        <rect x="78.27" y="13.44" width="2.2" height="50.69" rx="1" />
+        <rect x="81.74" y="20.76" width="2.2" height="37.25" rx="1" />
+        <rect x="83.82" y="18.93" width="2.2" height="41.53" rx="1" />
+        <rect x="87.29" y="23.82" width="2.2" height="31.76" rx="1" />
+        <rect x="90.77" y="28.70" width="2.2" height="23.21" rx="1" />
+        <rect x="94.24" y="32.37" width="2.2" height="16.49" rx="1" />
+        <rect x="97.02" y="34.81" width="2.2" height="10.99" rx="1" />
+      </g>
     </svg>
   );
 }

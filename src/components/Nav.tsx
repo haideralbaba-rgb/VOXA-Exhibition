@@ -19,10 +19,10 @@ export function Logo({ className = "" }: { className?: string }) {
         e.preventDefault();
         if (lenis) lenis.scrollTo(0, { duration: 1.6 });
       }}
-      className={`flex items-center gap-2 text-ink ${className}`}
+      className={`flex items-center gap-2.5 text-ink ${className}`}
       aria-label="VOXA"
     >
-      <VoxaMark className="h-7 w-7 text-lime" />
+      <VoxaMark className="h-7 w-auto shrink-0" />
       <span className="font-display text-2xl leading-none font-black tracking-[0.12em]" dir="ltr">
         VOXA
       </span>
