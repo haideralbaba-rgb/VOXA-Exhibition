@@ -6,6 +6,7 @@ import { IconClose, IconEye } from "./icons";
 import { MaskWords, SectionLabel } from "./Reveal";
 import { lenis } from "../lib/lenis";
 import { ar } from "../lib/format";
+import { useModalBack } from "../hooks/useModalBack";
 
 function ReelCard({
   r,
@@ -24,12 +25,23 @@ function ReelCard({
         i % 2 ? "translate-y-10 md:translate-y-14" : "-translate-y-2"
       }`}
     >
+      {/* Blurred background layer to prevent black letterboxes and preserve full design */}
+      <img
+        src={r.src}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-35 blur-xl"
+      />
+
+      {/* Main design: object-contain for square posters, object-cover for vertical */}
       <img
         src={r.src}
         alt={r.title}
         loading="lazy"
         draggable={false}
-        className="absolute inset-0 h-full w-full scale-105 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.15]"
+        className={`absolute inset-0 h-full w-full ${
+          r.aspect === "1/1" ? "object-contain p-2" : "object-cover"
+        } transition-transform duration-[1200ms] ease-out group-hover:scale-[1.08]`}
       />
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40" />
@@ -65,6 +77,9 @@ function ReelCard({
 }
 
 function ReelModal({ r, onClose }: { r: Reel; onClose: () => void }) {
+  // Support Android and iOS hardware/browser back buttons
+  useModalBack(true, onClose);
+
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", k);
@@ -92,7 +107,11 @@ function ReelModal({ r, onClose }: { r: Reel; onClose: () => void }) {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className="relative z-10 flex max-h-[92vh] w-full max-w-sm md:max-w-md flex-col overflow-hidden rounded-[28px] border border-white/15 bg-black shadow-2xl"
       >
-        <div className="relative aspect-[9/16] w-full bg-[#0a0a0d] overflow-hidden flex items-center justify-center">
+        <div
+          className={`relative ${
+            r.aspect === "1/1" ? "aspect-square max-h-[72vh]" : "aspect-[9/16]"
+          } w-full bg-[#0a0a0d] overflow-hidden flex items-center justify-center`}
+        >
           {r.youtubeId ? (
             <iframe
               src={`https://www.youtube-nocookie.com/embed/${r.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
@@ -102,11 +121,19 @@ function ReelModal({ r, onClose }: { r: Reel; onClose: () => void }) {
               allowFullScreen
             />
           ) : (
-            <img
-              src={r.src}
-              alt={r.title}
-              className="h-full w-full object-cover"
-            />
+            <>
+              <img
+                src={r.src}
+                alt=""
+                aria-hidden
+                className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-30 blur-2xl"
+              />
+              <img
+                src={r.src}
+                alt={r.title}
+                className="relative z-10 h-full w-full object-contain p-2 sm:p-4"
+              />
+            </>
           )}
         </div>
 

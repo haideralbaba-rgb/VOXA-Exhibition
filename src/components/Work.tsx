@@ -17,6 +17,7 @@ import {
 } from "./icons";
 import { lenis } from "../lib/lenis";
 import { ar } from "../lib/format";
+import { useModalBack } from "../hooks/useModalBack";
 
 type Filter = "all" | Kind;
 
@@ -123,7 +124,7 @@ function Card({
         style={{ rotateX: rx, rotateY: ry, transformPerspective: 900, borderRadius: 26 }}
         className="group relative h-full w-full cursor-pointer overflow-hidden border border-white/10 bg-coal select-none"
       >
-        {/* Background layer for aspect-ratio preservation */}
+        {/* Visual Layer: preserves 9:16 vertical ratio and image boundaries */}
         {hasCarousel && w.images ? (
           <>
             <img
@@ -142,16 +143,24 @@ function Card({
             />
           </>
         ) : (
-          <img
-            src={w.src}
-            alt={w.title}
-            loading="lazy"
-            draggable={false}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-110"
-          />
+          <>
+            <img
+              src={w.src}
+              alt=""
+              aria-hidden
+              className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-30 blur-2xl"
+            />
+            <img
+              src={w.src}
+              alt={w.title}
+              loading="lazy"
+              draggable={false}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105"
+            />
+          </>
         )}
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/40" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/40" />
 
         {/* Spotlight edge on hover */}
         <div
@@ -163,51 +172,53 @@ function Card({
         />
 
         {/* Top-start chip */}
-        <div className="absolute start-4 top-4 z-10 flex items-center gap-2 rounded-full bg-black/65 py-1.5 ps-3 pe-4 font-display text-xs font-extrabold text-white backdrop-blur-md">
-          <KindIcon kind={w.kind} className="h-4 w-4 text-lime" />
-          {hasCarousel ? `معرض صور (${ar(totalSlides)})` : kindMeta[w.kind].label}
+        <div className="absolute start-3 top-3 z-10 flex items-center gap-1.5 rounded-full bg-black/65 py-1 px-2.5 font-display text-[11px] font-extrabold text-white backdrop-blur-md sm:start-4 sm:top-4 sm:py-1.5 sm:ps-3 sm:pe-4 sm:text-xs">
+          <KindIcon kind={w.kind} className="h-3.5 w-3.5 text-lime sm:h-4 sm:w-4" />
+          <span className="truncate max-w-[90px] sm:max-w-none">
+            {hasCarousel ? `معرض صور (${ar(totalSlides)})` : kindMeta[w.kind].label}
+          </span>
         </div>
 
         {/* Top-end action badge or image counter */}
         {hasCarousel ? (
-          <div className="absolute end-4 top-4 z-10 flex items-center gap-2">
-            <span className="rounded-full bg-black/70 px-3.5 py-1.5 font-display text-xs font-black text-lime backdrop-blur-md">
+          <div className="absolute end-3 top-3 z-10 flex items-center gap-1.5 sm:end-4 sm:top-4 sm:gap-2">
+            <span className="rounded-full bg-black/70 px-2.5 py-1 font-display text-[11px] font-black text-lime backdrop-blur-md sm:px-3.5 sm:py-1.5 sm:text-xs">
               {ar(slide + 1)} / {ar(totalSlides)}
             </span>
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-black transition-all duration-500 group-hover:bg-lime">
-              <IconArrow className="h-4 w-4" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ink text-black transition-all duration-500 group-hover:bg-lime sm:h-10 sm:w-10">
+              <IconArrow className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
         ) : (
-          <div className="absolute end-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-ink text-black transition-all duration-500 group-hover:rotate-[360deg] group-hover:bg-lime">
-            <IconPlay className="h-3.5 w-3.5" />
+          <div className="absolute end-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-ink text-black transition-all duration-500 group-hover:rotate-[360deg] group-hover:bg-lime sm:end-4 sm:top-4 sm:h-10 sm:w-10">
+            <IconPlay className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
           </div>
         )}
 
         {/* Carousel controls on card */}
         {hasCarousel && (
-          <div className="absolute inset-x-3 top-1/2 z-10 flex -translate-y-1/2 items-center justify-between">
+          <div className="absolute inset-x-2 top-1/2 z-10 flex -translate-y-1/2 items-center justify-between sm:inset-x-3">
             <button
               onClick={prevSlide}
               aria-label="الصورة السابقة"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur transition-all hover:scale-110 hover:bg-lime hover:text-black"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur transition-all hover:scale-110 hover:bg-lime hover:text-black sm:h-9 sm:w-9"
             >
-              <IconChevronRight className="h-4 w-4" />
+              <IconChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </button>
             <button
               onClick={nextSlide}
               aria-label="الصورة التالية"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur transition-all hover:scale-110 hover:bg-lime hover:text-black"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur transition-all hover:scale-110 hover:bg-lime hover:text-black sm:h-9 sm:w-9"
             >
-              <IconChevronLeft className="h-4 w-4" />
+              <IconChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </button>
           </div>
         )}
 
         {/* Bottom content & indicators */}
-        <div className="absolute inset-x-0 bottom-0 z-10 p-5">
+        <div className="absolute inset-x-0 bottom-0 z-10 p-3.5 sm:p-5">
           {hasCarousel && w.images && (
-            <div className="mb-3 flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-2 flex items-center gap-1 sm:mb-3 sm:gap-1.5" onClick={(e) => e.stopPropagation()}>
               {w.images.map((_, i) => (
                 <button
                   key={i}
@@ -217,14 +228,14 @@ function Card({
                   }}
                   aria-label={`انتقل إلى الصورة ${i + 1}`}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === slide ? "w-6 bg-lime" : "w-1.5 bg-white/30 hover:bg-white/60"
+                    i === slide ? "w-5 sm:w-6 bg-lime" : "w-1.5 bg-white/30 hover:bg-white/60"
                   }`}
                 />
               ))}
             </div>
           )}
-          <div className="text-xs font-bold text-lime">{w.meta}</div>
-          <div className="mt-1 font-display text-2xl leading-[1.3] font-black text-white md:text-[1.7rem]">
+          <div className="text-[11px] font-bold text-lime sm:text-xs truncate">{w.meta}</div>
+          <div className="mt-0.5 font-display text-lg leading-[1.25] font-black text-white sm:text-2xl sm:leading-[1.3] md:text-[1.7rem] line-clamp-2">
             {w.title}
           </div>
         </div>
@@ -244,6 +255,9 @@ function Modal({
 }) {
   const [index, setIndex] = useState(initialIndex);
   const touchStartX = useRef<number | null>(null);
+
+  // Hook handles hardware & browser back buttons on mobile
+  useModalBack(true, onClose);
 
   const hasCarousel = Boolean(w.images && w.images.length > 0);
   const total = w.images?.length ?? 1;
@@ -297,24 +311,24 @@ function Modal({
         data-lenis-prevent
         className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden overflow-y-auto border border-white/15 bg-[#0b0b0e] md:flex-row"
       >
-        {/* Visual Showcase: YouTube Embed OR Carousel */}
+        {/* Visual Showcase: YouTube 9:16 Player OR Adaptive Carousel */}
         <div
           onTouchStart={hasCarousel ? onTouchStart : undefined}
           onTouchEnd={hasCarousel ? onTouchEnd : undefined}
-          className="relative flex aspect-square w-full shrink-0 items-center justify-center overflow-hidden bg-black sm:aspect-[4/3] md:aspect-auto md:min-h-[580px] md:w-[64%]"
+          className="relative flex w-full shrink-0 items-center justify-center overflow-hidden bg-black min-h-[50vh] sm:min-h-[58vh] md:min-h-[580px] md:w-[64%]"
         >
           {w.youtubeId ? (
-            <div className="relative flex h-full w-full items-center justify-center bg-black p-2 sm:p-4">
+            <div className="relative flex h-full w-full min-h-[52vh] sm:min-h-[60vh] md:min-h-[580px] items-center justify-center bg-black p-2 sm:p-4">
               <iframe
                 src={`https://www.youtube-nocookie.com/embed/${w.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
                 title={w.title}
-                className="aspect-[9/16] h-full max-h-[82vh] w-full max-w-[420px] rounded-2xl border-0 shadow-2xl"
+                className="aspect-[9/16] h-full max-h-[75vh] md:max-h-[82vh] w-auto max-w-[420px] rounded-2xl border-0 shadow-2xl"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />
             </div>
           ) : hasCarousel && w.images ? (
-            <div className="relative flex h-full w-full items-center justify-center overflow-hidden select-none">
+            <div className="relative flex h-full w-full min-h-[50vh] sm:min-h-[58vh] md:min-h-[580px] items-center justify-center overflow-hidden select-none">
               {/* Blurred atmospheric backdrop */}
               <img
                 src={w.images[index]}
@@ -328,7 +342,7 @@ function Modal({
                 key={index}
                 src={w.images[index]}
                 alt={`${w.title} - ${index + 1}`}
-                className="relative z-10 max-h-[72vh] w-full object-contain p-4 md:p-8"
+                className="relative z-10 max-h-[65vh] md:max-h-[72vh] w-full object-contain p-4 md:p-8"
               />
 
               {/* Counter badge */}
@@ -371,7 +385,19 @@ function Modal({
               </div>
             </div>
           ) : (
-            <img src={w.src} alt={w.title} className="absolute inset-0 h-full w-full object-cover" />
+            <div className="relative flex h-full w-full min-h-[50vh] sm:min-h-[58vh] md:min-h-[580px] items-center justify-center overflow-hidden">
+              <img
+                src={w.src}
+                alt=""
+                aria-hidden
+                className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-30 blur-2xl"
+              />
+              <img
+                src={w.src}
+                alt={w.title}
+                className="relative z-10 max-h-[70vh] w-full object-contain p-4 md:p-8"
+              />
+            </div>
           )}
         </div>
 

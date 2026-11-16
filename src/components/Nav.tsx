@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } fr
 import { VoxaMark, IconMenu, IconClose, IconArrow } from "./icons";
 import Magnetic from "./Magnetic";
 import { lenis, scrollToId } from "../lib/lenis";
+import { useModalBack } from "../hooks/useModalBack";
 
 const links = [
   { id: "work", label: "الأعمال" },
@@ -35,6 +36,9 @@ export default function Nav({ ready }: { ready: boolean }) {
   const [open, setOpen] = useState(false);
   const { scrollY, scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.3 });
+
+  // Close mobile drawer when phone back button is pressed
+  useModalBack(open, () => setOpen(false));
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const prev = scrollY.getPrevious() ?? 0;

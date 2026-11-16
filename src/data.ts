@@ -23,14 +23,14 @@ export const px = (id: number, w: number, h: number) =>
 export const VIDEO_LENS = "https://videos.pexels.com/video-files/2512876/2512876-hd_1920_1080_30fps.mp4";
 export const POSTER_LENS = "https://images.pexels.com/videos/2512876/free-video-2512876.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200";
 
-/* YouTube Shorts & Embeds */
+/* YouTube Shorts & Embeds (9:16 Vertical Posters 1080x1920) */
 export const YOUTUBE_HERO_ID = "3o3GbsRvlZA";
 export const YOUTUBE_HERO_URL = "https://www.youtube.com/shorts/3o3GbsRvlZA";
-export const YOUTUBE_HERO_POSTER = "https://img.youtube.com/vi/3o3GbsRvlZA/maxresdefault.jpg";
+export const YOUTUBE_HERO_POSTER = "/images/videos/hero.jpg";
 
 export const YOUTUBE_SECOND_ID = "l4Z3d8CRPgQ";
 export const YOUTUBE_SECOND_URL = "https://www.youtube.com/shorts/l4Z3d8CRPgQ";
-export const YOUTUBE_SECOND_POSTER = "https://img.youtube.com/vi/l4Z3d8CRPgQ/maxresdefault.jpg";
+export const YOUTUBE_SECOND_POSTER = "/images/videos/second.jpg";
 
 /* 8 Carousel Images */
 export const CAROUSEL_IMAGES: string[] = [
@@ -66,8 +66,8 @@ export const works: Work[] = [
     desc: "إنتاج بصري سينمائي يركز على تكوين الإضاءة والتلوين الحديث بأسلوب جريء وسريع الإيقاع.",
     src: YOUTUBE_HERO_POSTER,
     youtubeId: YOUTUBE_HERO_ID,
-    span: "col-span-2 row-span-2",
-    fspan: "col-span-2 row-span-2",
+    span: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
+    fspan: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
   },
   {
     id: "w2",
@@ -78,8 +78,8 @@ export const works: Work[] = [
     desc: "لقطات مكثفة وانتقالات مدروسة تمزج بين التفاصيل الدقيقة وحركة الكاميرا لتجسيد فلسفة VOXA البصرية.",
     src: YOUTUBE_SECOND_POSTER,
     youtubeId: YOUTUBE_SECOND_ID,
-    span: "col-span-2 row-span-2",
-    fspan: "col-span-2 row-span-2",
+    span: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
+    fspan: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
   },
   {
     id: "w3",
@@ -90,8 +90,8 @@ export const works: Work[] = [
     desc: "مجموعة فوتوغرافية حصرية تضم ثماني لقطات منتقاة بعناية تبرز جودة الزوايا، التباين، وعمق التفاصيل البصرية.",
     src: CAROUSEL_IMAGES[0],
     images: CAROUSEL_IMAGES,
-    span: "col-span-2 md:col-span-4 row-span-2 md:row-span-2",
-    fspan: "col-span-2 md:col-span-4 row-span-2 md:row-span-2",
+    span: "col-span-2 md:col-span-2 row-span-2 md:row-span-2",
+    fspan: "col-span-2 md:col-span-2 row-span-2 md:row-span-2",
   },
   {
     id: "w4",
@@ -122,6 +122,7 @@ export interface Reel {
   video?: string;
   tag: string;
   desc?: string;
+  aspect?: "9/16" | "1/1";
 }
 
 export const reels: Reel[] = [
@@ -131,6 +132,7 @@ export const reels: Reel[] = [
     views: "بوستر إعلاني",
     src: "/images/designs/shawarma_v.jpg",
     tag: "غرافيك",
+    aspect: "9/16",
     desc: "تصميم إعلاني سينمائي عمودي لشاورما اللحم المشوية على الفحم مع تايبوغرافي عربي بوزن تسويقي قوي.",
   },
   {
@@ -139,6 +141,7 @@ export const reels: Reel[] = [
     views: "سوشيال ميديا",
     src: "/images/designs/burger_v.jpg",
     tag: "براندينغ",
+    aspect: "9/16",
     desc: "بوستر تجاري لدبل سماش برغر بالجبن الذائب وإضاءة نيون داكنة تحفز الرغبة البصرية.",
   },
   {
@@ -147,6 +150,7 @@ export const reels: Reel[] = [
     views: "حملة إعلانية",
     src: "/images/designs/kebab_v.jpg",
     tag: "إعلان تجاري",
+    aspect: "9/16",
     desc: "تكوين فوتوغرافي وغرافيك للمشاوي العراقية على الجمر مع دخان متصاعد وعبارة هيبة المشاوي.",
   },
   {
@@ -155,6 +159,7 @@ export const reels: Reel[] = [
     views: "كافيه عصري",
     src: "/images/designs/coffee_v.jpg",
     tag: "غرافيك",
+    aspect: "9/16",
     desc: "تصميم بوستر منعش للقهوة المختصة بالكراميل مع انسكاب الحليب وتناثر حبوب البن المحمصة.",
   },
   {
@@ -163,6 +168,7 @@ export const reels: Reel[] = [
     views: "تراث وعصرنة",
     src: "/images/designs/masgouf.jpg",
     tag: "بوستر مطعم",
+    aspect: "1/1",
     desc: "تصميم فخم لسمك المسكوف العراقي على حطب الطرفاء مع نار متوهجة وهوية بصرية أصيلة.",
   },
   {
@@ -171,6 +177,7 @@ export const reels: Reel[] = [
     views: "مناسبات وعزائم",
     src: "/images/designs/quzi.jpg",
     tag: "إعلان تجاري",
+    aspect: "1/1",
     desc: "بوستر تسويقي لقوزي اللحم العراقي بالرز المبهر والمكسرات الذهبية بتنسيق إعلاني راقٍ.",
   },
   {
@@ -179,6 +186,7 @@ export const reels: Reel[] = [
     views: "صباحيات راقية",
     src: "/images/designs/kahi.jpg",
     tag: "غرافيك",
+    aspect: "1/1",
     desc: "تصميم صباحي شهي للكاهي المقرمش والكيمر العراقي العذب مع شيرة القطر الذهبية.",
   },
   {
@@ -187,6 +195,7 @@ export const reels: Reel[] = [
     views: "قائمة طعام",
     src: "/images/designs/pizza.jpg",
     tag: "سوشيال ميديا",
+    aspect: "1/1",
     desc: "بوستر إيطالي كلاسيكي لبيتزا نابولية بأطراف منقطة ومكونات طازجة مشوية بالفرن الحجري.",
   },
 ];
