@@ -4,18 +4,19 @@ type AudioWindow = Window & { webkitAudioContext?: typeof AudioContext };
 
 export default function SoundExperience() {
   const [enabled, setEnabled] = useState(false);
-  const [ambient, setAmbient] = useState(true);
   const contextRef = useRef<AudioContext | null>(null);
   const masterRef = useRef<GainNode | null>(null);
-  const padRef = useRef<{ oscillators: OscillatorNode[]; gain: GainNode } | null>(null);
+  const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+  const fadeIntervalRef = useRef<number | null>(null);
 
+  // تهيئة Web Audio للنقرات وسحبات الانتقال السريعة
   const getAudio = useCallback(() => {
     if (contextRef.current) return contextRef.current;
     const AudioContextClass = window.AudioContext || (window as AudioWindow).webkitAudioContext;
     if (!AudioContextClass) return null;
     const context = new AudioContextClass();
     const master = context.createGain();
-    master.gain.value = 0.32; // مستوى صوت ناعم وهادئ جداً
+    master.gain.value = 0.28; // مستوى صوت ناعم وهادئ
     master.connect(context.destination);
     contextRef.current = context;
     masterRef.current = master;
@@ -46,7 +47,7 @@ export default function SoundExperience() {
     osc.stop(now + 0.06);
   }, [getAudio]);
 
-  // نبضات خفيفة للانتقالات (Subtle Whooshes / Swishes): سحبة هواء ناعمة وقصيرة (< 0.35s)
+  // نبضات خفيفة للانتقالات (Subtle Whooshes): سحبة هواء ناعمة وقصيرة (< 0.3s)
   const playWhoosh = useCallback(() => {
     const context = getAudio();
     const master = masterRef.current;
@@ -54,8 +55,7 @@ export default function SoundExperience() {
     if (context.state === "suspended") void context.resume();
     const now = context.currentTime;
 
-    // طبقة هواء ناعمة مبنية على نويز مفلتر بحزمة ترددية متحركة
-    const bufferSize = Math.floor(context.sampleRate * 0.3);
+    const bufferSize = Math.floor(context.sampleRate * 0.28);
     const buffer = context.createBuffer(1, bufferSize, context.sampleRate);
     const channelData = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
@@ -66,94 +66,89 @@ export default function SoundExperience() {
 
     const filter = context.createBiquadFilter();
     filter.type = "bandpass";
-    filter.frequency.setValueAtTime(340, now);
-    filter.frequency.exponentialRampToValueAtTime(1150, now + 0.12);
-    filter.frequency.exponentialRampToValueAtTime(260, now + 0.28);
+    filter.frequency.setValueAtTime(320, now);
+    filter.frequency.exponentialRampToValueAtTime(1100, now + 0.11);
+    filter.frequency.exponentialRampToValueAtTime(260, now + 0.26);
     filter.Q.value = 1.3;
 
     const noiseGain = context.createGain();
     noiseGain.gain.setValueAtTime(0.0001, now);
-    noiseGain.gain.linearRampToValueAtTime(0.034, now + 0.1);
-    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.29);
+    noiseGain.gain.linearRampToValueAtTime(0.03, now + 0.09);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.27);
 
     noise.connect(filter);
     filter.connect(noiseGain);
     noiseGain.connect(master);
     noise.start(now);
 
-    // نغمة داعمة هادئة تعطي إحساساً بالانتقال السلس
     const tone = context.createOscillator();
     const toneGain = context.createGain();
     tone.type = "sine";
-    tone.frequency.setValueAtTime(160, now);
-    tone.frequency.exponentialRampToValueAtTime(420, now + 0.11);
-    tone.frequency.exponentialRampToValueAtTime(130, now + 0.28);
+    tone.frequency.setValueAtTime(150, now);
+    tone.frequency.exponentialRampToValueAtTime(380, now + 0.1);
+    tone.frequency.exponentialRampToValueAtTime(120, now + 0.26);
 
     toneGain.gain.setValueAtTime(0.0001, now);
-    toneGain.gain.linearRampToValueAtTime(0.022, now + 0.09);
-    toneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+    toneGain.gain.linearRampToValueAtTime(0.02, now + 0.08);
+    toneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
 
     tone.connect(toneGain);
     toneGain.connect(master);
     tone.start(now);
-    tone.stop(now + 0.29);
+    tone.stop(now + 0.27);
   }, [getAudio]);
 
-  // أجواء إلكترونية هادئة (Ambient / Minimal Synth): طبقة صوتية خفيفة ومكتومة (Low-pass)
-  const startPad = useCallback(() => {
-    const context = getAudio();
-    const master = masterRef.current;
-    if (!context || !master || padRef.current) return;
-    if (context.state === "suspended") void context.resume();
-
-    const gain = context.createGain();
-    gain.gain.setValueAtTime(0.0001, context.currentTime);
-    gain.gain.setTargetAtTime(0.022, context.currentTime, 2.4);
-
-    const lowpass = context.createBiquadFilter();
-    lowpass.type = "lowpass";
-    lowpass.frequency.value = 320; // صوت مكتوم دافئ بدون أي حدّة
-
-    gain.connect(lowpass);
-    lowpass.connect(master);
-
-    const freqs = [110, 164.81]; // وتر خماسي هادئ (A2 + E3)
-    const oscillators = freqs.map((frequency) => {
-      const oscillator = context.createOscillator();
-      oscillator.type = "sine";
-      oscillator.frequency.value = frequency;
-      oscillator.connect(gain);
-      oscillator.start();
-      return oscillator;
+  // تشغيل الموسيقى السينمائية المحيطية الجديدة عبر ملف الصوت المتقن
+  const startMusic = useCallback(() => {
+    if (!bgAudioRef.current) {
+      const audio = new Audio("/audio/ambient.mp3");
+      audio.loop = true;
+      audio.volume = 0;
+      bgAudioRef.current = audio;
+    }
+    const audio = bgAudioRef.current;
+    audio.play().catch(() => {
+      /* ignore autoplay rejection until user gesture */
     });
-    padRef.current = { oscillators, gain };
-  }, [getAudio]);
 
-  const stopPad = useCallback(() => {
-    const pad = padRef.current;
-    const context = contextRef.current;
-    if (!pad || !context) return;
-    pad.gain.gain.setTargetAtTime(0.0001, context.currentTime, 0.3);
-    window.setTimeout(() => {
-      pad.oscillators.forEach((oscillator) => {
-        try { oscillator.stop(); } catch { /* ignore */ }
-      });
-      pad.gain.disconnect();
-      if (padRef.current === pad) padRef.current = null;
-    }, 1000);
+    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+    // تدرج صوتي ناعم في البداية (fade in) حتى مستوى 0.22 الهادئ
+    fadeIntervalRef.current = window.setInterval(() => {
+      if (audio.volume < 0.22) {
+        audio.volume = Math.min(0.22, audio.volume + 0.02);
+      } else {
+        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      }
+    }, 100);
+  }, []);
+
+  const stopMusic = useCallback(() => {
+    const audio = bgAudioRef.current;
+    if (!audio) return;
+    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+    // تدرج صوتي سريع للإغلاق (fade out)
+    fadeIntervalRef.current = window.setInterval(() => {
+      if (audio.volume > 0.02) {
+        audio.volume = Math.max(0, audio.volume - 0.04);
+      } else {
+        audio.pause();
+        audio.volume = 0;
+        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      }
+    }, 60);
   }, []);
 
   const toggleSound = () => {
     if (enabled) {
       setEnabled(false);
-      stopPad();
+      stopMusic();
       if (contextRef.current) void contextRef.current.suspend();
       return;
     }
     const context = getAudio();
     if (context?.state === "suspended") void context.resume();
     setEnabled(true);
-    if (ambient) startPad();
+    startMusic();
     playClick();
   };
 
@@ -164,7 +159,6 @@ export default function SoundExperience() {
       const target = event.target;
       if (!(target instanceof Element) || target.closest("[data-sound-control]")) return;
 
-      // سحبة Whoosh عند فتح بطاقة مشروع، ريل، نافذة منبثقة، أو تبديل فلتر
       const whooshTrigger = target.closest(
         "[data-cursor='عرض'], [data-cursor='معاينة'], [data-cursor='تشغيل'], [data-cursor='ريل'], [data-cursor='إغلاق'], [data-sound='whoosh'], [role='tab']"
       );
@@ -173,14 +167,12 @@ export default function SoundExperience() {
         return;
       }
 
-      // نقرة دقيقة Soft Click عند الضغط على الأزرار والتفاعلات العادية
       const interactive = target.closest("button, a, [role='button'], [data-cursor], .cursor-pointer");
       if (interactive) {
         playClick();
       }
     };
 
-    // الاستماع لأي أحداث صوتية مخصصة من المكونات
     const handleCustomSound = (e: Event) => {
       const detail = (e as CustomEvent<string>).detail;
       if (detail === "whoosh") playWhoosh();
@@ -196,45 +188,67 @@ export default function SoundExperience() {
     };
   }, [enabled, playClick, playWhoosh]);
 
-  useEffect(() => {
-    if (!enabled) return;
-    if (ambient) startPad();
-    else stopPad();
-  }, [ambient, enabled, startPad, stopPad]);
-
   useEffect(() => () => {
+    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+    if (bgAudioRef.current) {
+      bgAudioRef.current.pause();
+      bgAudioRef.current = null;
+    }
     const context = contextRef.current;
     if (context && context.state !== "closed") void context.close();
   }, []);
 
   return (
     <div data-sound-control className="fixed bottom-5 end-5 z-[80]">
-      <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/80 p-1.5 ps-3 shadow-2xl backdrop-blur-xl">
-        <span className="text-[10px] font-bold tracking-[0.16em] text-white/55" dir="ltr">SOUND</span>
-        <button
-          type="button"
-          onClick={toggleSound}
-          aria-pressed={enabled}
-          aria-label={enabled ? "إيقاف المؤثرات الصوتية" : "تشغيل المؤثرات الصوتية"}
-          className={`flex h-10 items-center gap-2 rounded-full px-3.5 font-display text-xs font-black transition-colors ${
-            enabled ? "bg-lime text-black shadow-md shadow-lime/20" : "bg-white/10 text-white hover:bg-white/20"
-          }`}
-        >
-          <span className={`h-2 w-2 rounded-full transition-transform ${enabled ? "bg-black scale-110" : "bg-white/45"}`} />
-          {enabled ? "الصوت يعمل" : "الصوت مغلق"}
-        </button>
-        {enabled && (
-          <button
-            type="button"
-            onClick={() => setAmbient((value) => !value)}
-            aria-pressed={ambient}
-            aria-label={ambient ? "إيقاف الخلفية الموسيقية الهادئة" : "تشغيل الخلفية الموسيقية الهادئة"}
-            className="rounded-full px-2.5 py-2 text-[10px] font-bold text-white/65 transition-colors hover:text-white"
+      {/* زر مدمج وصغير جداً وأنيق (Micro Sound Toggle) */}
+      <button
+        type="button"
+        onClick={toggleSound}
+        aria-pressed={enabled}
+        aria-label={enabled ? "إيقاف المؤثرات الصوتية والموسيقى" : "تشغيل المؤثرات الصوتية والموسيقى"}
+        title={enabled ? "إيقاف الصوت" : "تشغيل الصوت"}
+        className={`group relative flex h-10 items-center gap-2 rounded-full border px-3 py-1.5 shadow-xl backdrop-blur-xl transition-all duration-300 ${
+          enabled
+            ? "border-lime/40 bg-black/85 text-lime shadow-lime/10"
+            : "border-white/15 bg-black/70 text-white/60 hover:border-white/30 hover:text-white"
+        }`}
+      >
+        {/* أيقونة الموجات الصوتية المصغرة أو مكبر الصوت المكتوم */}
+        {enabled ? (
+          <span className="flex items-center gap-0.5" aria-hidden="true">
+            <span className="h-3 w-0.5 animate-[pulse_0.8s_ease-in-out_infinite] rounded-full bg-lime" />
+            <span className="h-4.5 w-0.5 animate-[pulse_0.6s_ease-in-out_infinite_0.15s] rounded-full bg-lime" />
+            <span className="h-2.5 w-0.5 animate-[pulse_0.9s_ease-in-out_infinite_0.3s] rounded-full bg-lime" />
+          </span>
+        ) : (
+          <svg
+            className="h-4 w-4 transition-transform group-hover:scale-110"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
           >
-            {ambient ? "AMBIENT ON" : "AMBIENT OFF"}
-          </button>
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <line x1="23" y1="9" x2="17" y2="15" />
+            <line x1="17" y1="9" x2="23" y2="15" />
+          </svg>
         )}
-      </div>
+
+        <span className="font-display text-[11px] font-bold tracking-wider">
+          {enabled ? "SOUND ON" : "SOUND OFF"}
+        </span>
+
+        {/* نقطة ضوئية نابضة عند تفعيل الصوت */}
+        {enabled && (
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-lime opacity-75" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-lime" />
+          </span>
+        )}
+      </button>
     </div>
   );
 }
