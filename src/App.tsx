@@ -11,6 +11,7 @@ import Reels from "./components/Reels";
 import About from "./components/About";
 import Services from "./components/Services";
 import Contact from "./components/Contact";
+import SoundExperience from "./components/SoundExperience";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
@@ -32,6 +33,7 @@ export default function App() {
   return (
     <div className="grain relative bg-void">
       <Cursor />
+      <SoundExperience />
       <AnimatePresence>{!loaded && <Preloader key="pre" onDone={done} />}</AnimatePresence>
       <Nav ready={loaded} />
       <main>
