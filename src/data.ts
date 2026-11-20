@@ -9,6 +9,7 @@ export interface Work {
   desc: string;
   src: string;
   youtubeId?: string;
+  youtubeUrl?: string;
   video?: string;
   images?: string[];
   /** span in the "all" view */
@@ -37,7 +38,7 @@ export const YOUTUBE_THIRD_URL = "https://www.youtube.com/shorts/yFcjGUHXOMo";
 export const YOUTUBE_THIRD_POSTER = "/images/videos/video3.jpg";
 
 export const YOUTUBE_FOURTH_ID = "l4Z3d8CRPgQ";
-export const YOUTUBE_FOURTH_URL = "https://www.youtube.com/shorts/l4Z3d8CRPgQ";
+export const YOUTUBE_FOURTH_URL = "https://youtube.com/shorts/l4Z3d8CRPgQ?si=LQIniYo12p2V9Dl9";
 export const YOUTUBE_FOURTH_POSTER = "/images/videos/video4.jpg";
 
 /* كولاج صور الأول (3 تصاميم مشروبات وسموذي منعشة) */
@@ -91,6 +92,7 @@ export const works: Work[] = [
     desc: "إنتاج بصري سينمائي يركز على تكوين الإضاءة والتلوين الحديث بأسلوب جريء وسريع الإيقاع في بيت بيروت.",
     src: YOUTUBE_HERO_POSTER,
     youtubeId: YOUTUBE_HERO_ID,
+    youtubeUrl: YOUTUBE_HERO_URL,
     span: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
     fspan: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
   },
@@ -103,6 +105,7 @@ export const works: Work[] = [
     desc: "لقطات مكثفة وانتقالات مدروسة تمزج بين التفاصيل الدقيقة وحركة الكاميرا لتجسيد فلسفة VOXA البصرية.",
     src: YOUTUBE_SECOND_POSTER,
     youtubeId: YOUTUBE_SECOND_ID,
+    youtubeUrl: YOUTUBE_SECOND_URL,
     span: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
     fspan: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
   },
@@ -115,6 +118,7 @@ export const works: Work[] = [
     desc: "توزيع درامي للظلال وتدرجات النور بزوايا تصوير مبتكرة تبرز جمالية المكان وسلاسة الحركة.",
     src: YOUTUBE_THIRD_POSTER,
     youtubeId: YOUTUBE_THIRD_ID,
+    youtubeUrl: YOUTUBE_THIRD_URL,
     span: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
     fspan: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
   },
@@ -127,6 +131,7 @@ export const works: Work[] = [
     desc: "استكشاف معماري بصري لمعالم وتفاصيل بيت بيروت التاريخية بنظرة معاصرة وإخراج فني متقن.",
     src: YOUTUBE_FOURTH_POSTER,
     youtubeId: YOUTUBE_FOURTH_ID,
+    youtubeUrl: YOUTUBE_FOURTH_URL,
     span: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
     fspan: "col-span-1 md:col-span-1 row-span-2 md:row-span-2",
   },
@@ -192,6 +197,7 @@ export interface Reel {
   views: string;
   src: string;
   youtubeId?: string;
+  youtubeUrl?: string;
   video?: string;
   tag: string;
   desc?: string;

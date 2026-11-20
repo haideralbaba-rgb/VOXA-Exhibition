@@ -422,7 +422,7 @@ function Modal({
             {/* If YouTube video, add quick external link */}
             {w.youtubeId && (
               <a
-                href={`https://www.youtube.com/shorts/${w.youtubeId}`}
+                href={w.youtubeUrl || `https://www.youtube.com/shorts/${w.youtubeId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-6 flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 font-display text-xs font-bold text-white transition-colors hover:border-red-500 hover:text-red-400"
