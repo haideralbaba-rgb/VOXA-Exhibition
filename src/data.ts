@@ -58,22 +58,17 @@ export const COLLAGE_2_IMAGES: string[] = [
   "/images/collage2/c2_6.jpg",
 ];
 
-/* 8 Carousel Photography Images (معرض الصور الفوتوغرافية بإعادة ترتيب متناسقة) */
+/* 4 Carousel Photography Images (معرض الصور الفوتوغرافية) */
 export const CAROUSEL_IMAGES: string[] = [
   "/images/carousel/c61056bf-84b8-490e-8b09-b58d6471a093.png",
-  "/images/carousel/IMG_20261031_055955.png",
   "/images/carousel/IMG_20261115_142847.png",
-  "/images/carousel/IMG_20261031_060042.png",
   "/images/carousel/20261115_114336_0_UTC_0.png",
-  "/images/carousel/IMG_20261031_060125.png",
-  "/images/carousel/Screenshot_2026-11-15-14-07-49-505_com.miui.gallery.jpg",
   "/images/carousel/IMG_20261031_060915.png",
 ];
 
-/* Restaurant Graphic Design Posters (بوسترات المطاعم بإعادة ترتيب متناغمة) */
+/* 7 Restaurant Graphic Design Posters (بوسترات المطاعم) */
 export const RESTAURANT_POSTERS: string[] = [
   "/images/restaurants/burger.jpg",
-  "/images/restaurants/shawarma.jpg",
   "/images/restaurants/pizza.jpg",
   "/images/restaurants/masgouf.jpg",
   "/images/restaurants/kebab.jpg",
@@ -163,9 +158,9 @@ export const works: Work[] = [
     id: "w7",
     kind: "photo",
     title: "معرض الصور الفوتوغرافية الحصري",
-    meta: "كاروسيل فوتوغرافي · ٨ صور مختارة",
+    meta: "كاروسيل فوتوغرافي · ٤ صور مختارة",
     year: "٢٠٢٦",
-    desc: "مجموعة فوتوغرافية حصرية تضم ثماني لقطات منتقاة بعناية تبرز جودة الزوايا، التباين، وعمق التفاصيل البصرية.",
+    desc: "مجموعة فوتوغرافية حصرية تضم أربع لقطات منتقاة بعناية تبرز جودة الزوايا، التباين، وعمق التفاصيل البصرية.",
     src: CAROUSEL_IMAGES[0],
     images: CAROUSEL_IMAGES,
     span: "col-span-2 md:col-span-2 row-span-2 md:row-span-2",
@@ -175,7 +170,7 @@ export const works: Work[] = [
     id: "w8",
     kind: "graphic",
     title: "بوسترات إعلانية للمطاعم",
-    meta: "غرافيك ديزاين · ٨ تصاميم تسويقية",
+    meta: "غرافيك ديزاين · ٧ تصاميم تسويقية",
     year: "٢٠٢٦",
     desc: "سلسلة تصاميم وبوسترات إعلانية تجارية للمطاعم العراقية والعصرية، تجمع بين جاذبية الأطباق والعبارات التسويقية المباشرة.",
     src: RESTAURANT_POSTERS[0],
@@ -223,17 +218,7 @@ export const reels: Reel[] = [
     tag: "بوستر مطعم",
     aspect: "1/1",
     desc: "تصميم فخم لسمك المسكوف العراقي على حطب الطرفاء مع نار متوهجة وهوية بصرية أصيلة.",
-  },
-  {
-    id: "r3",
-    title: "شاورما ع أصولها",
-    views: "بوستر إعلاني",
-    src: "/images/designs/shawarma_v.jpg",
-    tag: "غرافيك",
-    aspect: "9/16",
-    desc: "تصميم إعلاني سينمائي عمودي لشاورما اللحم المشوية على الفحم مع تايبوغرافي عربي بوزن تسويقي قوي.",
-  },
-  {
+  },  {
     id: "r4",
     title: "بيتزا نابولية فاخرة",
     views: "قائمة طعام",
