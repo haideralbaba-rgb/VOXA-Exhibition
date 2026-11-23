@@ -41,14 +41,14 @@ export const YOUTUBE_FOURTH_ID = "Dym5iekDNuQ";
 export const YOUTUBE_FOURTH_URL = "https://youtube.com/shorts/Dym5iekDNuQ?si=iXT5lddFviP_fdOT";
 export const YOUTUBE_FOURTH_POSTER = "/images/videos/video4.jpg";
 
-/* كولاج صور الأول (3 تصاميم مشروبات وسموذي منعشة) */
+/* تصاميم المشروبات (3 بوسترات ترويجية) */
 export const COLLAGE_1_IMAGES: string[] = [
   "/images/collage1/c1_1.png",
   "/images/collage1/c1_2.png",
   "/images/collage1/c1_3.png",
 ];
 
-/* كولاج صور الثاني (6 لقطات معمارية - بيت بيروت) */
+/* بيت بيروت: معمار (6 لقطات فوتوغرافية) */
 export const COLLAGE_2_IMAGES: string[] = [
   "/images/collage2/c2_1.jpg",
   "/images/collage2/c2_2.jpg",
@@ -58,7 +58,7 @@ export const COLLAGE_2_IMAGES: string[] = [
   "/images/collage2/c2_6.jpg",
 ];
 
-/* 4 Carousel Photography Images (معرض الصور الفوتوغرافية) */
+/* لقطات فوتوغرافية (4 لقطات منتقاة) */
 export const CAROUSEL_IMAGES: string[] = [
   "/images/carousel/c61056bf-84b8-490e-8b09-b58d6471a093.png",
   "/images/carousel/IMG_20261115_142847.png",
@@ -66,7 +66,7 @@ export const CAROUSEL_IMAGES: string[] = [
   "/images/carousel/IMG_20261031_060915.png",
 ];
 
-/* 7 Restaurant Graphic Design Posters (بوسترات المطاعم) */
+/* بوسترات المطاعم (7 بوسترات تجارية) */
 export const RESTAURANT_POSTERS: string[] = [
   "/images/restaurants/burger.jpg",
   "/images/restaurants/pizza.jpg",
@@ -81,10 +81,10 @@ export const works: Work[] = [
   {
     id: "v1",
     kind: "video",
-    title: "ريل العرض الرئيسي · بيت بيروت",
-    meta: "الفيديو الأول · YouTube Shorts",
+    title: "بيت بيروت I",
+    meta: "فيديو قصير · YouTube Shorts",
     year: "٢٠٢٦",
-    desc: "إنتاج بصري سينمائي يركز على تكوين الإضاءة والتلوين الحديث بأسلوب جريء وسريع الإيقاع في بيت بيروت.",
+    desc: "لقطات سينمائية وتوزيع إضاءة سريع الإيقاع في بيت بيروت.",
     src: YOUTUBE_HERO_POSTER,
     youtubeId: YOUTUBE_HERO_ID,
     youtubeUrl: YOUTUBE_HERO_URL,
@@ -94,10 +94,10 @@ export const works: Work[] = [
   {
     id: "v2",
     kind: "video",
-    title: "إيقاع بصري سينمائي",
-    meta: "الفيديو الثاني · YouTube Shorts",
+    title: "مشاهد سينمائية",
+    meta: "فيديو قصير · YouTube Shorts",
     year: "٢٠٢٦",
-    desc: "لقطات مكثفة وانتقالات مدروسة تمزج بين التفاصيل الدقيقة وحركة الكاميرا لتجسيد فلسفة VOXA البصرية.",
+    desc: "انتقالات وحركة كاميرا تركز على الزوايا والتفاصيل.",
     src: YOUTUBE_SECOND_POSTER,
     youtubeId: YOUTUBE_SECOND_ID,
     youtubeUrl: YOUTUBE_SECOND_URL,
@@ -107,10 +107,10 @@ export const works: Work[] = [
   {
     id: "v3",
     kind: "video",
-    title: "تكوين سينمائي وإضاءة",
-    meta: "الفيديو الثالث · YouTube Shorts",
+    title: "إضاءة وحركة",
+    meta: "فيديو قصير · YouTube Shorts",
     year: "٢٠٢٦",
-    desc: "توزيع درامي للظلال وتدرجات النور بزوايا تصوير مبتكرة تبرز جمالية المكان وسلاسة الحركة.",
+    desc: "توزيع الظلال وتدرجات الضوء بزوايا تصوير مدروسة.",
     src: YOUTUBE_THIRD_POSTER,
     youtubeId: YOUTUBE_THIRD_ID,
     youtubeUrl: YOUTUBE_THIRD_URL,
@@ -120,10 +120,10 @@ export const works: Work[] = [
   {
     id: "v4",
     kind: "video",
-    title: "تفاصيل وحركة · بيت بيروت",
-    meta: "الفيديو الرابع · YouTube Shorts",
+    title: "بيت بيروت II",
+    meta: "فيديو قصير · YouTube Shorts",
     year: "٢٠٢٦",
-    desc: "استكشاف معماري بصري لمعالم وتفاصيل بيت بيروت التاريخية بنظرة معاصرة وإخراج فني متقن.",
+    desc: "استكشاف بصري لتفاصيل ومعالم بيت بيروت التاريخية.",
     src: YOUTUBE_FOURTH_POSTER,
     youtubeId: YOUTUBE_FOURTH_ID,
     youtubeUrl: YOUTUBE_FOURTH_URL,
@@ -133,10 +133,10 @@ export const works: Work[] = [
   {
     id: "c1",
     kind: "graphic",
-    title: "كولاج تصاميم المشروبات والسموذي",
-    meta: "كولاج صور الأول · ٣ تصاميم منعشة",
+    title: "تصاميم المشروبات",
+    meta: "بوسترات ترويجية · ٣ تصاميم",
     year: "٢٠٢٦",
-    desc: "سلسلة بوسترات إعلانية منعشة للمشروبات والسموذي المثلج والقهوة، بتكوينات لونية طازجة وطاقة بصرية نابضة بالحياة.",
+    desc: "سلسلة بوسترات إعلانية للمشروبات والقهوة بتكوينات لونية طازجة وإخراج معاصر.",
     src: COLLAGE_1_IMAGES[0],
     images: COLLAGE_1_IMAGES,
     span: "col-span-2 md:col-span-2 row-span-2 md:row-span-2",
@@ -145,10 +145,10 @@ export const works: Work[] = [
   {
     id: "c2",
     kind: "photo",
-    title: "كولاج صور بيت بيروت المعماري",
-    meta: "كولاج صور الثاني · ٦ لقطات فوتوغرافية",
+    title: "بيت بيروت: معمار",
+    meta: "توثيق فوتوغرافي · ٦ لقطات",
     year: "٢٠٢٦",
-    desc: "مجموعة فوتوغرافية حصرية توثق روح وتفاصيل مبنى بيت بيروت بزوايا سينمائية وإضاءة طبيعية وألوان دافئة.",
+    desc: "توثيق بصري لتفاصيل وعمارة مبنى بيت بيروت بإضاءة طبيعية دافئة.",
     src: COLLAGE_2_IMAGES[0],
     images: COLLAGE_2_IMAGES,
     span: "col-span-2 md:col-span-2 row-span-2 md:row-span-2",
@@ -157,10 +157,10 @@ export const works: Work[] = [
   {
     id: "w7",
     kind: "photo",
-    title: "معرض الصور الفوتوغرافية الحصري",
-    meta: "كاروسيل فوتوغرافي · ٤ صور مختارة",
+    title: "لقطات فوتوغرافية",
+    meta: "سلسلة فوتوغرافية · ٤ لقطات",
     year: "٢٠٢٦",
-    desc: "مجموعة فوتوغرافية حصرية تضم أربع لقطات منتقاة بعناية تبرز جودة الزوايا، التباين، وعمق التفاصيل البصرية.",
+    desc: "لقطات منتقاة تبرز التباين وتوزيع الضوء وعمق التفاصيل البصرية.",
     src: CAROUSEL_IMAGES[0],
     images: CAROUSEL_IMAGES,
     span: "col-span-2 md:col-span-2 row-span-2 md:row-span-2",
@@ -169,10 +169,10 @@ export const works: Work[] = [
   {
     id: "w8",
     kind: "graphic",
-    title: "بوسترات إعلانية للمطاعم",
-    meta: "غرافيك ديزاين · ٧ تصاميم تسويقية",
+    title: "بوسترات المطاعم",
+    meta: "تصميم تجاري · ٧ بوسترات",
     year: "٢٠٢٦",
-    desc: "سلسلة تصاميم وبوسترات إعلانية تجارية للمطاعم العراقية والعصرية، تجمع بين جاذبية الأطباق والعبارات التسويقية المباشرة.",
+    desc: "سلسلة بوسترات إعلانية وتجارية للمطاعم تجمع بين جاذبية الأطباق والخطوط الواضحة.",
     src: RESTAURANT_POSTERS[0],
     images: RESTAURANT_POSTERS,
     span: "col-span-2 md:col-span-2 row-span-2 md:row-span-2",
@@ -199,69 +199,70 @@ export interface Reel {
   aspect?: "9/16" | "1/1";
 }
 
-/* إعادة ترتيب تصاميم الريلز بتناوب انسيابي بين البوسترات العمودية والمربعة */
+/* تصاميم البوسترات بتناوب انسيابي بين المقاسين العمودي والمربع */
 export const reels: Reel[] = [
   {
     id: "r1",
-    title: "القرمشة الأصلية",
+    title: "دبل برغر",
     views: "سوشيال ميديا",
     src: "/images/designs/burger_v.jpg",
     tag: "براندينغ",
     aspect: "9/16",
-    desc: "بوستر تجاري لدبل سماش برغر بالجبن الذائب وإضاءة نيون داكنة تحفز الرغبة البصرية.",
+    desc: "بوستر تجاري لسماش برغر بالجبن وإضاءة نيون هادئة.",
   },
   {
     id: "r2",
-    title: "مسكوف عراقي أصيل",
-    views: "تراث وعصرنة",
+    title: "مسكوف عراقي",
+    views: "هوية مطاعم",
     src: "/images/designs/masgouf.jpg",
     tag: "بوستر مطعم",
     aspect: "1/1",
-    desc: "تصميم فخم لسمك المسكوف العراقي على حطب الطرفاء مع نار متوهجة وهوية بصرية أصيلة.",
-  },  {
+    desc: "تصميم لسمك المسكوف العراقي على حطب الطرفاء بنار متوهجة.",
+  },
+  {
     id: "r4",
-    title: "بيتزا نابولية فاخرة",
+    title: "بيتزا نابولية",
     views: "قائمة طعام",
     src: "/images/designs/pizza.jpg",
     tag: "سوشيال ميديا",
     aspect: "1/1",
-    desc: "بوستر إيطالي كلاسيكي لبيتزا نابولية بأطراف منقطة ومكونات طازجة مشوية بالفرن الحجري.",
+    desc: "بوستر لبيتزا نابولية بمكونات طازجة مشوية بالفرن الحجري.",
   },
   {
     id: "r5",
-    title: "مزاجك هنا",
+    title: "قهوة مثلجة",
     views: "كافيه عصري",
     src: "/images/designs/coffee_v.jpg",
     tag: "غرافيك",
     aspect: "9/16",
-    desc: "تصميم بوستر منعش للقهوة المختصة بالكراميل مع انسكاب الحليب وتناثر حبوب البن المحمصة.",
+    desc: "تصميم بوستر للقهوة المختصة مع انسكاب الحليب وتناثر حبوب البن.",
   },
   {
     id: "r6",
-    title: "هيبة الضيافة",
-    views: "مناسبات وعزائم",
+    title: "قوزي عراقي",
+    views: "إعلان تجاري",
     src: "/images/designs/quzi.jpg",
     tag: "إعلان تجاري",
     aspect: "1/1",
-    desc: "بوستر تسويقي لقوزي اللحم العراقي بالرز المبهر والمكسرات الذهبية بتنسيق إعلاني راقٍ.",
+    desc: "بوستر تسويقي لقوزي اللحم العراقي بالرز المبهر والمكسرات الذهبية.",
   },
   {
     id: "r7",
-    title: "هيبة المشاوي",
+    title: "مشاوي على الفحم",
     views: "حملة إعلانية",
     src: "/images/designs/kebab_v.jpg",
     tag: "إعلان تجاري",
     aspect: "9/16",
-    desc: "تكوين فوتوغرافي وغرافيك للمشاوي العراقية على الجمر مع دخان متصاعد وعبارة هيبة المشاوي.",
+    desc: "تكوين فوتوغرافي وغرافيك للمشاوي العراقية على الجمر مع دخان متصاعد.",
   },
   {
     id: "r8",
-    title: "كاهي وكيمر سدّة",
-    views: "صباحيات راقية",
+    title: "كاهي وكيمر",
+    views: "صباحيات",
     src: "/images/designs/kahi.jpg",
     tag: "غرافيك",
     aspect: "1/1",
-    desc: "تصميم صباحي شهي للكاهي المقرمش والكيمر العراقي العذب مع شيرة القطر الذهبية.",
+    desc: "تصميم للكاهي المقرمش والكيمر العراقي مع شيرة القطر الذهبية.",
   },
 ];
 

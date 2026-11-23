@@ -209,9 +209,9 @@ export default function Reels() {
         </motion.div>
 
         <div className="relative z-10 px-5 pt-20 md:px-10 md:pt-24">
-          <SectionLabel index="٠٣">تصاميم وبوسترات إعلانية</SectionLabel>
+          <SectionLabel index="٠٣">تصاميم وبوسترات</SectionLabel>
           <h2 className="font-display text-5xl leading-[1.15] font-black md:text-8xl">
-            <MaskWords text="٦٠ إطارًا" highlight={[0]} /> <MaskWords text="من الإبهار" delay={0.15} />
+            <MaskWords text="تصاميم" highlight={[0]} /> <MaskWords text="مختارة" delay={0.15} />
           </h2>
         </div>
 
@@ -226,10 +226,10 @@ export default function Reels() {
           ))}
           <div className="flex h-[58vh] w-[70vw] shrink-0 flex-col items-start justify-center gap-4 ps-6 md:w-[30vw]">
             <div className="font-display text-4xl leading-[1.3] font-black md:text-6xl">
-              والمزيد <span className="text-lime">من الإبهار</span> قادم.
+              والمزيد <span className="text-lime">من الأعمال</span> قادم.
             </div>
             <div className="text-lg font-bold text-ink/60">
-              {ar(reels.length)} تصاميم حصرية تميز علامتك
+              {ar(reels.length)} تصاميم تميز علامتك
             </div>
           </div>
         </motion.div>
