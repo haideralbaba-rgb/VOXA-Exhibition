@@ -22,9 +22,9 @@ function Word({
   highlight: boolean;
 }) {
   const start = i / total;
-  const end = start + 1.4 / total;
-  const opacity = useTransform(p, [start, Math.min(end, 1)], [0.18, 1]);
-  const y = useTransform(p, [start, Math.min(end, 1)], [6, 0]);
+  const end = start + 1.2 / total;
+  const opacity = useTransform(p, [start, Math.min(end, 1)], [0.25, 1]);
+  const y = useTransform(p, [start, Math.min(end, 1)], [4, 0]);
 
   return (
     <motion.span
@@ -42,20 +42,20 @@ export default function About() {
   const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 0.85", "end 0.45"],
+    offset: ["start 0.9", "end 0.4"],
   });
 
   return (
-    <section id="about" className="relative py-28 md:py-40 bg-[#000000] text-white">
-      <div className="mx-auto max-w-4xl px-6 text-center">
-        <div className="apple-badge mb-6 mx-auto">
+    <section id="about" className="relative py-16 sm:py-28 md:py-36 bg-[#000000] text-white">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center">
+        <div className="apple-badge mb-4 sm:mb-6 mx-auto">
           <span className="text-[#2997ff]">✦</span>
           <span>فلسفة الاستوديو</span>
         </div>
 
         <p
           ref={ref}
-          className="font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.4] sm:leading-[1.4] md:leading-[1.35] tracking-tight"
+          className="font-display text-xl sm:text-3xl md:text-5xl font-semibold leading-[1.5] sm:leading-[1.4] tracking-tight"
         >
           {words.map((w, i) => (
             <Word

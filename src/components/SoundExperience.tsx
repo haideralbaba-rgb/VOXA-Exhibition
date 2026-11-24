@@ -119,7 +119,7 @@ export default function SoundExperience() {
   }, []);
 
   return (
-    <div data-sound-control className="fixed bottom-6 start-6 z-40">
+    <div data-sound-control className="fixed bottom-4 start-4 sm:bottom-6 sm:start-6 z-40">
       <button
         type="button"
         onClick={toggleSound}
