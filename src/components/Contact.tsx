@@ -1,100 +1,115 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
-import Magnetic from "./Magnetic";
-import { MaskWords } from "./Reveal";
+import { motion } from "motion/react";
 import { IconArrow, IconFacebook, IconInstagram, IconWhatsapp } from "./icons";
 import { Logo } from "./Nav";
+import { lenis } from "../lib/lenis";
 
 const socials = [
+  {
+    label: "واتساب",
+    href: "https://wa.me/9647782383749",
+    Icon: IconWhatsapp,
+    highlight: true,
+  },
   {
     label: "إنستغرام",
     href: "https://www.instagram.com/voxa.vision?cplk=eGdmdXo5bHBjdmZl",
     Icon: IconInstagram,
+    highlight: false,
   },
   {
     label: "فيسبوك",
     href: "https://www.facebook.com/share/1Jg8ThvxKq/",
     Icon: IconFacebook,
-  },
-  {
-    label: "واتساب",
-    href: "https://wa.me/9647782383749",
-    Icon: IconWhatsapp,
+    highlight: false,
   },
 ];
 
 export default function Contact() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
-  const bigX = useTransform(scrollYProgress, [0, 1], ["12%", "-6%"]);
-  const rot = useTransform(scrollYProgress, [0, 1], [-25, 0]);
+  const scrollToTop = () => {
+    if (lenis) lenis.scrollTo(0, { duration: 1.2 });
+  };
 
   return (
-    <footer id="contact" ref={ref} className="relative overflow-hidden bg-lime text-black">
-      <div className="relative z-10 mx-auto max-w-[1500px] px-5 pt-28 pb-10 md:px-10 md:pt-44">
-        <div className="mb-6 flex items-center gap-4 font-display text-sm font-bold md:text-base">
-          <span>٠٥</span>
-          <span className="h-px w-12 bg-black/40" />
-          <span>تواصل</span>
-        </div>
-        <h2 className="font-display text-[3.6rem] leading-[1.12] font-black md:text-[9.5rem]">
-          <MaskWords text="لنصنع شيئًا" />
-          <br />
-          <MaskWords text="لا يُنسى." delay={0.15} />
-        </h2>
+    <footer id="contact" className="relative bg-[#000000] text-white pt-10 pb-12 overflow-hidden">
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Apple Pro CTA Card */}
+        <div className="relative overflow-hidden rounded-[32px] sm:rounded-[40px] border border-white/[0.12] bg-[#161617] p-8 sm:p-14 md:p-20 text-center">
+          {/* Subtle ambient glow behind card */}
+          <div
+            className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-[350px] w-[500px] rounded-full opacity-30 blur-[100px]"
+            style={{
+              background: "radial-gradient(circle, rgba(41, 151, 255, 0.3) 0%, transparent 70%)",
+            }}
+          />
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-10 md:mt-20 md:flex-row md:items-end">
-          <Magnetic strength={0.4}>
-            <a
-              href="mailto:voxavision@gmail.com"
-              className="group flex items-center gap-4 rounded-full bg-black py-3 ps-3 pe-8 font-display text-xl font-black text-lime transition-transform hover:scale-[1.03] md:text-3xl"
-            >
-              <motion.span
-                style={{ rotate: rot }}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-lime text-black md:h-20 md:w-20"
-              >
-                <IconArrow className="h-6 w-6 md:h-9 md:w-9" />
-              </motion.span>
-              <span dir="ltr">voxavision@gmail.com</span>
-            </a>
-          </Magnetic>
+          <div className="relative z-10 mx-auto max-w-2xl">
+            <div className="apple-badge mb-6 mx-auto">
+              <span className="text-[#2997ff]">✦</span>
+              <span>تواصل مباشر</span>
+            </div>
 
-          <div className="flex gap-3">
-            {socials.map(({ label, href, Icon }) => (
+            <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.2]">
+              جاهز لصناعة
+              <br />
+              <span className="apple-text-gradient">عملك البصري القادم؟</span>
+            </h2>
+
+            <p className="mt-6 text-sm sm:text-lg text-[#86868b] leading-relaxed">
+              فريق VOXA مستعد لمناقشة أفكارك وتطوير الهوية البصرية أو الحملة الإعلانية التي تليق بعلامتك.
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <a
-                key={label}
-                href={href}
+                href="https://wa.me/9647782383749"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-2 rounded-full border-2 border-black px-5 py-3 font-display text-[15px] font-black transition-colors hover:bg-black hover:text-lime"
-                aria-label={label}
+                className="apple-pill-btn !py-3 !px-7 !text-sm !font-semibold shadow-lg"
               >
-                <Icon className="h-5 w-5" />
-                <span className="hidden sm:inline">{label}</span>
+                <IconWhatsapp className="h-4 w-4 text-emerald-600" />
+                <span>تحدث معنا عبر واتساب</span>
               </a>
-            ))}
+
+              <a
+                href="mailto:voxavision@gmail.com"
+                className="apple-pill-btn-secondary !py-3 !px-7 !text-sm"
+              >
+                <span dir="ltr">voxavision@gmail.com</span>
+              </a>
+            </div>
+
+            {/* Social Links Pills */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+              {socials.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2 text-xs font-medium text-[#86868b] transition-all hover:bg-white/[0.1] hover:text-white"
+                >
+                  <Icon className="h-4 w-4" />
+                  <span>{label}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* giant outlined wordmark, parallax by scroll */}
-      <motion.div
-        style={{ x: bigX }}
-        className="pointer-events-none relative z-0 mt-10 select-none font-display text-[34vw] leading-[0.82] font-black tracking-tight whitespace-nowrap md:mt-16"
-        dir="ltr"
-        aria-hidden
-      >
-        <span className="text-black">VOXA</span>
-        <span className="ms-[4vw]" style={{ color: "transparent", WebkitTextStroke: "2px #000" }}>
-          VOXA
-        </span>
-      </motion.div>
+        {/* Apple Minimalist Footer Strip */}
+        <div className="mt-16 pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#86868b]">
+          <div className="flex items-center gap-3">
+            <Logo />
+            <span>· جميع الحقوق محفوظة © {new Date().getFullYear()}</span>
+          </div>
 
-      <div className="relative z-10 border-t-2 border-black/90 bg-void text-ink">
-        <div className="mx-auto flex max-w-[1500px] flex-col items-center justify-between gap-4 px-5 py-6 text-sm font-bold text-ink/60 md:flex-row md:px-10">
-          <Logo />
-          <span>© {new Date().getFullYear().toLocaleString("ar-EG", { useGrouping: false })} VOXA — جميع الحقوق محفوظة</span>
-          <span>صُنع بحركة سلسة ٦٠ إطارًا</span>
+          <div className="flex items-center gap-6">
+            <button
+              onClick={scrollToTop}
+              className="text-[#86868b] hover:text-white transition-colors"
+            >
+              العودة للأعلى ↑
+            </button>
+          </div>
         </div>
       </div>
     </footer>

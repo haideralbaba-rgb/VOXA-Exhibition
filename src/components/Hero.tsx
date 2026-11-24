@@ -1,173 +1,136 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionTemplate, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
-import { MaskWords } from "./Reveal";
-import Magnetic from "./Magnetic";
-import { IconArrow, IconPlay } from "./icons";
+import { motion } from "motion/react";
+import { IconPlay, IconArrow } from "./icons";
 import { scrollToId } from "../lib/lenis";
-import { VIDEO_LENS, POSTER_LENS } from "../data";
-import { ar } from "../lib/format";
-
-function Timecode() {
-  const [t, setT] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setT((v) => v + 1), 40);
-    return () => clearInterval(id);
-  }, []);
-  const f = t % 25;
-  const s = Math.floor(t / 25) % 60;
-  const m = Math.floor(t / 1500) % 60;
-  const pad = (n: number) => ar(String(n).padStart(2, "0"));
-  return (
-    <span dir="ltr" className="font-display tabular-nums">
-      {pad(m)}:{pad(s)}:{pad(f)}
-    </span>
-  );
-}
+import { POSTER_LENS, VIDEO_LENS, YOUTUBE_HERO_ID, YOUTUBE_HERO_URL } from "../data";
 
 export default function Hero({ ready }: { ready: boolean }) {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Scroll-driven: the framed reel expands to a full-bleed cinema screen
-  const clip = useTransform(
-    scrollYProgress,
-    [0, 0.62],
-    ["inset(67% 16% 6% 16% round 28px)", "inset(0% 0% 0% 0% round 0px)"],
-  );
-  const vScale = useTransform(scrollYProgress, [0, 0.62], [1.4, 1]);
-  const titleY = useTransform(scrollYProgress, [0, 0.45], ["0%", "-35%"]);
-  const titleO = useTransform(scrollYProgress, [0, 0.32], [1, 0]);
-  const overlayO = useTransform(scrollYProgress, [0.5, 0.78], [0, 1]);
-  const overlayY = useTransform(scrollYProgress, [0.5, 0.78], [60, 0]);
-  const hudO = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
-
-  // pointer spotlight
-  const mx = useSpring(useMotionValue(50), { stiffness: 60, damping: 20 });
-  const my = useSpring(useMotionValue(35), { stiffness: 60, damping: 20 });
-  const spot = useMotionTemplate`radial-gradient(600px circle at ${mx}% ${my}%, rgba(200,255,46,0.16), transparent 60%)`;
-
-  const onMove = (e: React.PointerEvent) => {
-    mx.set((e.clientX / window.innerWidth) * 100);
-    my.set((e.clientY / window.innerHeight) * 100);
+  const toggleVideo = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
   };
 
   return (
-    <section id="top" ref={ref} onPointerMove={onMove} className="relative h-[260vh]">
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="grid-lines absolute inset-0" />
-        <motion.div className="absolute inset-0" style={{ background: spot }} />
+    <section id="hero" className="relative min-h-screen pt-28 pb-20 md:pt-36 md:pb-32 overflow-hidden bg-black text-center">
+      {/* Apple-style atmospheric top glow */}
+      <div
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full opacity-40 blur-[140px]"
+        style={{
+          background: "radial-gradient(circle, rgba(41, 151, 255, 0.25) 0%, rgba(120, 119, 198, 0.15) 45%, transparent 70%)",
+        }}
+      />
 
-        {/* Headline */}
+      <div className="relative z-10 mx-auto max-w-5xl px-6">
+        {/* Apple Kicker */}
         <motion.div
-          style={{ y: titleY, opacity: titleO }}
-          className="relative z-10 flex h-full flex-col px-5 pt-24 md:px-10 md:pt-28"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-6 flex justify-center"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={ready ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="mb-3 flex w-fit items-center gap-3 rounded-full border border-white/15 bg-white/[0.04] py-2 ps-3 pe-5 font-display text-[13px] font-bold backdrop-blur md:mb-5 md:text-sm"
-          >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="pulse-ring" />
-              <span className="relative h-2.5 w-2.5 rounded-full bg-lime" />
-            </span>
-            متاح لمشاريع ٢٠٢٦
-          </motion.div>
-
-          <h1
-            className="font-display font-black text-ink"
-            style={{
-              fontSize: "clamp(3.1rem, min(10.5vw, 17vh), 10.5rem)",
-              lineHeight: 1.12,
-            }}
-          >
-            <span className="block">
-              <MaskWords text="أصنع المشهد." trigger="ready" ready={ready} delay={0.1} />
-            </span>
-            <span className="block">
-              <MaskWords text="وأترك الأثر." trigger="ready" ready={ready} delay={0.35} highlight={[1]} />
-            </span>
-          </h1>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={ready ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 1, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 flex items-end justify-between gap-6 md:mt-6"
-          >
-            <p className="hidden max-w-sm text-lg leading-relaxed font-medium text-ink/70 md:block">
-              أنا <b className="font-extrabold text-ink">VOXA</b> — مصوّر ومصمم جرافيك. أصنع صورًا وفيديوهات وهويات بصرية تُرى من
-              أول ثانية وتُتذكَّر طويلًا.
-            </p>
-            <div className="flex items-center gap-3">
-              <Magnetic strength={0.3}>
-                <button
-                  onClick={() => scrollToId("work")}
-                  className="group flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 font-display text-[15px] font-black text-black transition-colors hover:bg-lime"
-                >
-                  شاهد الأعمال
-                  <IconArrow className="h-4 w-4 rotate-[225deg] transition-transform group-hover:translate-y-0.5" />
-                </button>
-              </Magnetic>
-            </div>
-          </motion.div>
+          <div className="apple-badge">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#2997ff]" />
+            <span>VOXA EXHIBITION · استوديو الإنتاج البصري</span>
+          </div>
         </motion.div>
 
-        {/* Expanding cinema frame */}
-        <motion.div
-          className="absolute inset-0 z-20 overflow-hidden bg-black"
-          style={{ clipPath: clip }}
-          data-cursor="ريل"
+        {/* Apple Massive Gradient Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+          className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[1.12]"
         >
-          <motion.video
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ scale: vScale }}
-            src={VIDEO_LENS}
-            poster={POSTER_LENS}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30" />
+          <span className="apple-text-gradient block">رؤية سينمائية.</span>
+          <span className="text-white/90 block">صُنعت لتبقى.</span>
+        </motion.h1>
 
-          {/* HUD */}
-          <motion.div
-            style={{ opacity: hudO }}
-            className="absolute inset-x-6 top-[68%] flex items-center justify-between text-[11px] font-bold text-white md:inset-x-[17%] md:top-[69%] md:text-sm"
-          >
-            <span className="flex items-center gap-2">
-              <span className="blink h-2 w-2 rounded-full bg-hot" />
-              REC
-            </span>
-            <Timecode />
-          </motion.div>
+        {/* Subtitle in signature Apple #86868b */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+          className="mx-auto mt-6 max-w-2xl text-base sm:text-xl text-[#86868b] leading-relaxed font-normal"
+        >
+          استوديو متكامل لصناعة الأفلام الإعلانية، التوثيق المعماري، والهويات البصرية
+          المبتكرة بأعلى معايير الإتقان والدقة السينمائية.
+        </motion.p>
 
-          <motion.div
-            style={{ opacity: overlayO, y: overlayY }}
-            className="absolute inset-x-0 bottom-0 flex flex-col items-start justify-between gap-6 p-6 md:flex-row md:items-end md:p-12"
+        {/* Apple CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+          className="mt-8 flex flex-wrap items-center justify-center gap-4"
+        >
+          <button
+            onClick={() => scrollToId("highlights")}
+            className="apple-pill-btn !py-2.5 !px-6 !text-sm shadow-md"
           >
-            <div>
-              <div className="mb-3 flex items-center gap-3 font-display text-sm font-bold text-lime md:text-base">
-                <span className="blink h-2 w-2 rounded-full bg-hot" />
-                ريل العرض · <Timecode />
-              </div>
-              <div className="font-display text-5xl leading-[1.15] font-black md:text-8xl">
-                شاهد كيف <span className="text-lime">أرى.</span>
+            <span>استكشف أبرز الأعمال</span>
+            <IconArrow className="h-4 w-4 rotate-[-45deg]" />
+          </button>
+
+          <button
+            onClick={() => scrollToId("cinema")}
+            className="apple-pill-btn-secondary !py-2.5 !px-6 !text-sm"
+          >
+            <IconPlay className="h-4 w-4 text-[#2997ff]" />
+            <span>المسرح السينمائي</span>
+          </button>
+        </motion.div>
+
+        {/* Apple Pro Hardware / Cinema Stage Frame */}
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="relative mx-auto mt-16 max-w-4xl"
+        >
+          {/* Subtle outer bezel */}
+          <div className="relative overflow-hidden rounded-[24px] sm:rounded-[36px] border border-white/[0.12] bg-[#161617] p-2 sm:p-3 shadow-[0_24px_80px_rgba(0,0,0,0.9)]">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[18px] sm:rounded-[28px] bg-black">
+              <video
+                ref={videoRef}
+                src={VIDEO_LENS}
+                poster={POSTER_LENS}
+                playsInline
+                muted
+                loop
+                autoPlay
+                className="h-full w-full object-cover"
+              />
+
+              {/* Cinema vignette */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+
+              {/* Bottom HUD bar */}
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4 sm:p-6 text-white text-xs">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-medium text-[#86868b]">عرض ترويجي رسمي · 4K UHD</span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={toggleVideo}
+                    className="flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 font-medium text-white backdrop-blur-md transition-colors hover:bg-white/30"
+                  >
+                    <span>{isPlaying ? "إيقاف مؤقت" : "تشغيل"}</span>
+                  </button>
+                </div>
               </div>
             </div>
-            <button
-              onClick={() => scrollToId("work")}
-              className="flex items-center gap-3 rounded-full bg-lime py-3 ps-3 pe-7 font-display text-base font-black text-black"
-            >
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black text-lime">
-                <IconPlay className="h-4 w-4" />
-              </span>
-              تصفّح المعرض
-            </button>
-          </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>

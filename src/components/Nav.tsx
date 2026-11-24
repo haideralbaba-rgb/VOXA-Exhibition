@@ -1,30 +1,31 @@
 import { useState } from "react";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { VoxaMark, IconMenu, IconClose, IconArrow } from "./icons";
-import Magnetic from "./Magnetic";
 import { lenis, scrollToId } from "../lib/lenis";
 import { useModalBack } from "../hooks/useModalBack";
 
-const links = [
-  { id: "work", label: "الأعمال" },
-  { id: "reels", label: "الريلز" },
-  { id: "about", label: "عنّي" },
+const navLinks = [
+  { id: "hero", label: "نظرة عامة" },
+  { id: "highlights", label: "أبرز الأعمال" },
+  { id: "cinema", label: "الأفلام والريلز" },
+  { id: "gallery", label: "المعارض" },
+  { id: "specs", label: "المواصفات" },
   { id: "services", label: "الخدمات" },
 ];
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <a
-      href="#top"
+      href="#hero"
       onClick={(e) => {
         e.preventDefault();
-        if (lenis) lenis.scrollTo(0, { duration: 1.6 });
+        if (lenis) lenis.scrollTo(0, { duration: 1.2 });
       }}
-      className={`flex items-center gap-2.5 text-ink ${className}`}
+      className={`flex items-center gap-2.5 text-white transition-opacity hover:opacity-80 ${className}`}
       aria-label="VOXA"
     >
-      <VoxaMark className="h-7 w-auto shrink-0" />
-      <span className="font-display text-2xl leading-none font-black tracking-[0.12em]" dir="ltr">
+      <VoxaMark className="h-6 w-auto shrink-0 text-white" />
+      <span className="font-display text-xl font-bold tracking-[0.16em]" dir="ltr">
         VOXA
       </span>
     </a>
@@ -32,92 +33,97 @@ export function Logo({ className = "" }: { className?: string }) {
 }
 
 export default function Nav({ ready }: { ready: boolean }) {
-  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const { scrollY, scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.3 });
+  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
 
-  // Close mobile drawer when phone back button is pressed
   useModalBack(open, () => setOpen(false));
 
   useMotionValueEvent(scrollY, "change", (y) => {
-    const prev = scrollY.getPrevious() ?? 0;
-    setHidden(y > prev && y > 160);
+    setScrolled(y > 30);
   });
 
-  const go = (id: string) => {
+  const navigateTo = (id: string) => {
     setOpen(false);
-    setTimeout(() => scrollToId(id), open ? 350 : 0);
+    setTimeout(() => scrollToId(id), open ? 300 : 0);
   };
 
   return (
     <>
-      <motion.div
-        className="fixed inset-x-0 top-0 z-[70] h-[3px] origin-right bg-lime"
-        style={{ scaleX: progress }}
-      />
-
-      <motion.header
-        className="fixed inset-x-0 top-0 z-[65] flex items-center justify-between px-5 py-4 md:px-10 md:py-6"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: hidden && !open ? -110 : 0, opacity: ready ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      <header
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-black/75 backdrop-blur-2xl border-b border-white/[0.08] py-3"
+            : "bg-transparent py-4 md:py-5"
+        }`}
       >
-        <Logo />
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 md:px-8">
+          <Logo />
 
-        <nav className="hidden items-center gap-1 rounded-full border border-white/10 bg-black/50 p-1.5 backdrop-blur-xl md:flex">
-          {links.map((l) => (
-            <button
-              key={l.id}
-              onClick={() => go(l.id)}
-              className="rounded-full px-5 py-2 font-display text-[15px] font-bold text-ink/80 transition-colors hover:bg-ink hover:text-black"
-            >
-              {l.label}
-            </button>
-          ))}
-        </nav>
+          {/* Desktop Apple-style navigation links */}
+          <nav className="hidden items-center gap-8 md:flex">
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => navigateTo(link.id)}
+                className="text-xs font-medium text-[#86868b] transition-colors duration-200 hover:text-white"
+              >
+                {link.label}
+              </button>
+            ))}
+          </nav>
 
-        <div className="flex items-center gap-3">
-          <Magnetic strength={0.25} className="hidden md:inline-block">
+          {/* Apple-style Action Button */}
+          <div className="flex items-center gap-3">
             <button
-              onClick={() => go("contact")}
-              className="group flex items-center gap-2 rounded-full bg-lime px-6 py-3 font-display text-[15px] font-black text-black transition-transform hover:scale-[1.04]"
+              onClick={() => navigateTo("contact")}
+              className="apple-pill-btn !py-1.5 !px-4 !text-xs !font-semibold shadow-sm"
             >
-              لنتحدّث
-              <IconArrow className="h-4 w-4 transition-transform group-hover:-translate-x-0.5 group-hover:-translate-y-0.5" />
+              <span>تواصل معنا</span>
+              <IconArrow className="h-3.5 w-3.5 rotate-[-45deg]" />
             </button>
-          </Magnetic>
-          <button
-            onClick={() => setOpen((o) => !o)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/50 backdrop-blur-xl md:hidden"
-            aria-label="القائمة"
-          >
-            {open ? <IconClose className="h-5 w-5" /> : <IconMenu className="h-5 w-5" />}
-          </button>
+
+            {/* Mobile menu trigger */}
+            <button
+              onClick={() => setOpen(!open)}
+              className="flex h-8 w-8 items-center justify-center rounded-full text-white/80 hover:text-white md:hidden"
+              aria-label="القائمة"
+            >
+              {open ? <IconClose className="h-5 w-5" /> : <IconMenu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
-      </motion.header>
+      </header>
 
+      {/* Apple-style Mobile Menu Overlay */}
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-[64] flex flex-col justify-center gap-2 bg-void/95 px-8 backdrop-blur-2xl md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="fixed inset-0 z-40 flex flex-col bg-black/95 pt-20 px-8 pb-10 backdrop-blur-2xl md:hidden"
           >
-            {[...links, { id: "contact", label: "تواصل" }].map((l, i) => (
-              <motion.button
-                key={l.id}
-                onClick={() => go(l.id)}
-                initial={{ y: 40, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.08 * i + 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-baseline gap-4 border-b border-white/10 py-4 text-start font-display text-5xl font-black"
+            <div className="flex flex-col gap-6 mt-4">
+              {navLinks.map((link, idx) => (
+                <button
+                  key={link.id}
+                  onClick={() => navigateTo(link.id)}
+                  className="flex items-center justify-between border-b border-white/[0.06] pb-4 text-right text-lg font-medium text-white/90"
+                  style={{ animationDelay: `${idx * 40}ms` }}
+                >
+                  <span>{link.label}</span>
+                  <span className="text-xs text-[#86868b]">→</span>
+                </button>
+              ))}
+              <button
+                onClick={() => navigateTo("contact")}
+                className="apple-pill-btn mt-4 w-full !py-3.5 !text-sm"
               >
-                <span className="text-base text-lime">٠{i + 1}</span>
-                {l.label}
-              </motion.button>
-            ))}
+                <span>ابدأ مشروعك الآن</span>
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,42 +1,46 @@
 import { useEffect, useState } from "react";
 import { animate, motion } from "motion/react";
 import { VoxaMark } from "./icons";
-import { ar } from "../lib/format";
 
 export default function Preloader({ onDone }: { onDone: () => void }) {
-  const [n, setN] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const controls = animate(0, 100, {
-      duration: 1.9,
-      ease: [0.65, 0, 0.35, 1],
-      onUpdate: (v) => setN(v),
-      onComplete: () => setTimeout(onDone, 250),
+      duration: 1.4,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (v) => setProgress(v),
+      onComplete: () => setTimeout(onDone, 200),
     });
     return () => controls.stop();
   }, [onDone]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-[150] flex flex-col justify-between bg-lime p-6 text-black md:p-10"
-      initial={{ clipPath: "inset(0% 0% 0% 0%)" }}
-      exit={{ clipPath: "inset(0% 0% 100% 0%)" }}
-      transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+      className="fixed inset-0 z-[150] flex flex-col items-center justify-center bg-black text-white"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <VoxaMark className="h-7 w-auto shrink-0 text-black" />
-          <span className="font-display text-xl font-black tracking-wider">VOXA</span>
-        </div>
-        <span className="font-display text-sm font-bold">جارٍ تحميل المعرض</span>
-      </div>
+      <div className="flex flex-col items-center gap-6">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex items-center gap-3"
+        >
+          <VoxaMark className="h-10 w-auto text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]" />
+          <span className="font-display text-2xl font-bold tracking-[0.2em]" dir="ltr">
+            VOXA
+          </span>
+        </motion.div>
 
-      <div className="relative">
-        <div className="font-display text-[34vw] leading-[0.8] font-black tabular-nums md:text-[24vw]">
-          {ar(n)}
-        </div>
-        <div className="mt-6 h-[3px] w-full bg-black/15">
-          <div className="h-full origin-right bg-black" style={{ width: `${n}%`, marginInlineStart: 0 }} />
+        {/* Minimal Apple hairline progress bar */}
+        <div className="h-[2px] w-44 overflow-hidden rounded-full bg-white/15">
+          <motion.div
+            className="h-full bg-white"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
     </motion.div>

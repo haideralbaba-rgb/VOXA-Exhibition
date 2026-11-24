@@ -51,31 +51,40 @@
 }
 
 @theme {
-  --font-display: "Cairo VX", "Cairo", "Tajawal VX", system-ui, sans-serif;
-  --font-body: "Tajawal VX", "Tajawal", "Cairo VX", system-ui, sans-serif;
-  --color-void: #050506;
-  --color-coal: #0b0b0e;
-  --color-ink: #f5f2ea;
-  --color-lime: #c8ff2e;
-  --color-hot: #ff4a2b;
+  --font-display: "Cairo VX", "Cairo", "Tajawal VX", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Tajawal VX", "Tajawal", "Cairo VX", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-void: #000000;
+  --color-surface: #0a0a0c;
+  --color-card: #161617;
+  --color-card-hover: #1c1c1e;
+  --color-ink: #f5f5f7;
+  --color-muted: #86868b;
+  --color-dim: #6e6e73;
+  --color-apple-blue: #2997ff;
+  --color-apple-blue-hover: #0071e3;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(255, 255, 255, 0.16);
 }
 
-/* ───────── Base ───────── */
+/* ───────── Base Apple Aesthetic ───────── */
 html {
-  background: var(--color-void);
-  color: var(--color-ink);
+  background: #000000;
+  color: #f5f5f7;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 body {
-  background: var(--color-void);
+  background: #000000;
+  color: #f5f5f7;
   overflow-x: hidden;
   min-height: 100vh;
 }
 ::selection {
-  background: var(--color-lime);
-  color: #000;
+  background: #0071e3;
+  color: #ffffff;
 }
 
 /* Lenis */
@@ -93,73 +102,112 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* Custom cursor only for precise pointers */
-@media (hover: hover) and (pointer: fine) {
-  html.has-cursor,
-  html.has-cursor * {
-    cursor: none !important;
-  }
-}
-
-/* ───────── Utilities ───────── */
+/* ───────── Apple Utilities ───────── */
 .font-display {
   font-family: var(--font-display);
 }
-.text-outline {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--color-ink);
+
+.apple-glass {
+  background: rgba(22, 22, 23, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
-.text-outline-dim {
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgba(245, 242, 234, 0.22);
+
+.apple-nav-glass {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: -50%;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  animation: grain 1.2s steps(6) infinite;
+
+.apple-card {
+  background: #161617;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
-@keyframes grain {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-3%, 2%); }
-  40% { transform: translate(2%, -3%); }
-  60% { transform: translate(-2%, -1%); }
-  80% { transform: translate(3%, 3%); }
-  100% { transform: translate(0, 0); }
+
+.apple-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: #1c1c1e;
 }
-.grid-lines {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+
+.apple-subheading {
+  color: #86868b;
+  font-weight: 400;
+  line-height: 1.5;
 }
-@keyframes pulse-ring {
-  0% { transform: scale(0.8); opacity: 0.8; }
-  100% { transform: scale(2.4); opacity: 0; }
-}
-.pulse-ring::before {
-  content: "";
-  position: absolute;
-  inset: 0;
+
+.apple-pill-btn {
+  background: #ffffff;
+  color: #000000;
   border-radius: 9999px;
-  background: var(--color-lime);
-  animation: pulse-ring 1.8s ease-out infinite;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
-@keyframes blink {
-  50% { opacity: 0; }
+.apple-pill-btn:hover {
+  background: #e8e8ed;
+  transform: scale(1.02);
 }
-.blink {
-  animation: blink 1s steps(1) infinite;
+
+.apple-pill-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
-@media (prefers-reduced-motion: reduce) {
-  .grain::after,
-  .pulse-ring::before,
-  .blink {
-    animation: none;
-  }
+.apple-pill-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.02);
+}
+
+.apple-glow {
+  background: radial-gradient(circle at 50% 0%, rgba(120, 119, 198, 0.12), rgba(0, 0, 0, 0) 65%);
+}
+
+.apple-text-gradient {
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.72) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.apple-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  font-weight: 600;
+  color: #86868b;
+  letter-spacing: 0.04em;
+}
+
+/* Custom scrollbar for cinema rail */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
